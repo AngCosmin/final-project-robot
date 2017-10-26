@@ -1,0 +1,9 @@
+{
+    "name": "server",
+    "version": "0.0.1",
+    "description": "Server for my wifi controlled car",
+    "dependencies": {
+        "express": "^4.16.2",
+        "socket.io": "^2.0.4"
+    }
+}
