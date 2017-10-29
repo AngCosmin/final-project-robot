@@ -25,19 +25,23 @@ jcenter({
     url "http://jcenter.bintray.com/"
 })
 ```
-- if you get an error with **android sdk not found**
+- **android sdk not found**
   - Go [here](https://developer.android.com/studio/index.html#downloads) and download sdk tools
   - Create a folder called *Android* somewhere on the disk and inside it create a folder *tools*
   - In this folder extract what you have downloaded. (Yes, there will be a tools folder inside a tools folder)
   - Go in your application folder and then in android folder and create a new file called `local.properties`
   - Paste this in file `sdk.dir = /home/cosmin/Android/tools/`
-- if you get an error with **license agreement**
+- **license agreement**
   - Go in *Android/tools/tools/bin* and run `./sdkmanager --licenses`
-- if you get an error with **tools.jar not found**
+- **tools.jar not found**
     - Go [here](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and download the JDK
     - Extract it somewhere on the disk
     - Go in your application folder and then in anroid folder and open `gradle.properties`
     - Add this line at the end `org.gradle.java.home=/home/......../jdk1.8.0_151/`
+- **unable to load script from assets 'index.android.bundle'**
+    - Run this: `mkdir android/app/src/main/assets` in your project folder
+    - Then this: `react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res`
+    - And finally this: `react-native run-android`
 
 ### Notes
 - to create a new react-native project use `react-native init myapp`
