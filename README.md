@@ -42,6 +42,8 @@ jcenter({
     - Run this: `mkdir android/app/src/main/assets` in your project folder
     - Then this: `react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res`
     - And finally this: `react-native run-android`
+- **Failed at the app@0.0.1 start script.**
+    -- Run this: `echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p`
 
 ### Notes
 - to create a new react-native project use `react-native init myapp`
