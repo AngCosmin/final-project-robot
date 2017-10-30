@@ -1,15 +1,33 @@
 import websocket
 import thread
-import time
+from time import sleep
 import json
 import sys
 import tty
 import termios
+import RPi.GPIO as GPIO
 
-def on_message(ws, message):
+
+def on_message(ws, _object):
     try:
-        messageJSON = json.loads(message)
-        print ("SERVER: " + messageJSON['status'] + " " + messageJSON['message'])
+        _object = json.loads(_object)
+        _event = _object['event'];
+        
+        if _event == 'move':
+            print ('Move ' + _object['direction']) 
+            direction = _object['direction'];
+
+            if direction == 'forward':
+                GPIO.output(35, True)
+                GPIO.output(37, False)
+            elif direction == 'backward':
+                GPIO.output(35, False)
+                GPIO.output(37, True)
+        if _event == 'stop':
+            print ('Stop')
+
+            GPIO.output(35, False)
+            GPIO.output(37, False)
     except Exception as e:
         print (e)
 
@@ -17,20 +35,23 @@ def on_error(ws, error):
     print(error)
 
 def on_close(ws):
-    print("### closed ###")
+    print("### Stopping... ###")
+    GPIO.output(35, False)
+    GPIO.output(37, False)
+    sleep(1)
+    GPIO.cleanup()
+    print("### Stopped ###")    
 
 def on_open(ws):
-    ws.send("Connected")
-    # for i in range(0, 5):
-    #     age = input("Your age? ")
-    #     ws.send(str(age))
-    while (True):
-        command = raw_input("What do you want to do? ")
-        ws.send(command)
+    ws.send(json.dumps({'event': 'connection', 'client': 'Car'}));
 
 if __name__ == "__main__":
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(35, GPIO.OUT)
+    GPIO.setup(37, GPIO.OUT)
+
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("ws://localhost:3000")
+    ws = websocket.WebSocketApp("ws://192.168.0.166:3000")
 
     ws.on_message = on_message
     ws.on_open = on_open

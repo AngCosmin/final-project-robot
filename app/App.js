@@ -1,13 +1,9 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
 import React, { Component } from 'react';
 import {
 	Platform,
 	StyleSheet,
 	Button,
+	Slider,
 	Text,
 	View
 } from 'react-native';
@@ -27,7 +23,7 @@ export default class App extends Component<{}> {
 		this.ws = new WebSocket('ws://192.168.0.166:3000');
 
 		this.ws.onopen = () => {
-			this.ws.send('M-am conectat');
+			this.ws.send(JSON.stringify({'event': 'connection', 'client': 'React Native'}));
 		};
 
 		this.ws.onmessage = (e) => {
@@ -39,21 +35,36 @@ export default class App extends Component<{}> {
 		};
 		
 		this.ws.onclose = (e) => {
+			this.ws.send('close');
 			console.log(e.code, e.reason);
 		};
 	}
 
-	send() {
-		this.ws.send('something');
+	forward() {
+		this.ws.send(JSON.stringify({'event': 'move', 'direction': 'forward'}));
+	}
+
+	move(value) {
+		if (value >= 15) {
+			this.ws.send(JSON.stringify({'event': 'move', 'direction': 'forward'}));		
+		}
+		else if (value <= -15) {
+			this.ws.send(JSON.stringify({'event': 'move', 'direction': 'backward'}));					
+		}
+		else {
+			this.ws.send(JSON.stringify({'event': 'stop'}));					
+		}
 	}
 
 	render() {
 		return (
-			<View style={styles.container}>
-				<Text style={styles.welcome}>
-					Remote Control
-				</Text>
-				<Button onPress={() => this.send()} title='Send'/>
+			<View style={ styles.container }>
+				<Slider style={{ width: '100%' }}
+					step={1}
+					minimumValue={-50}
+					maximumValue={50}
+					value={0}
+					onValueChange={ value => this.move(value) } />
 			</View>
 		);
 	}
@@ -61,19 +72,11 @@ export default class App extends Component<{}> {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
 		backgroundColor: '#F5FCFF',
 	},
 	welcome: {
 		fontSize: 20,
 		textAlign: 'center',
 		margin: 10,
-	},
-	instructions: {
-		textAlign: 'center',
-		color: '#333333',
-		marginBottom: 5,
 	},
 });

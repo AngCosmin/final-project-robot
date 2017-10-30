@@ -1,30 +1,61 @@
 const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ port: 3000 });
-var clients = {};
 
-wss.on('connection', function (ws, req) {
-    console.log('New connection!');
+var reactClient = null;
+var carClient = null;
+var commandsHistory = [];
 
-    // Generate client unique ID
-    var clientId = new Date().getUTCMilliseconds();
-    clients[clientId] = ws;
+wss.on('connection', function (ws) {
+    // console.log('New connection!');
 
-    wss.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({'status': 'success', 'message': 'We have a new connection! Welcome client ' + clientId}));
+    ws.on('message', function (object) {
+        object = JSON.parse(object);
+
+        var event = object.event;
+
+        switch(event)
+        {
+            case 'connection':
+                var client = object.client;
+
+                if (client === 'React Native') {
+                    reactClient = ws;
+                }
+                else if (client === 'Car') {
+                    carClient = ws;
+                }
+
+                console.log('%s just connected!', client);
+                break;
+            case 'move':
+                if (commandsHistory[commandsHistory.length - 1] == 'move') {
+                    break;
+                }
+
+                carClient.send(JSON.stringify(object));
+                commandsHistory.push('move');
+                break;
+            case 'stop':
+                if (commandsHistory[commandsHistory.length - 1] == 'stop') {
+                    break;
+                }
+                
+                carClient.send(JSON.stringify(object));
+                commandsHistory.push('stop');
+                break;
+            case 'message':
+                console.log('Received: %s', object);
+                break;
         }
-    });
 
-    ws.on('message', function (message) {
-        console.log('received: %s', message);
 
-        ws.send(JSON.stringify({'status': 'success', 'message': 'Your message was received. You said ' + message}));
+        // ws.send(JSON.stringify({'status': 'success', 'message': 'Your message was received. You said ' + object}));
     });
 
     ws.on('close', function () {
         console.log('Disconnected');
 
-        delete clients[clientId];
+        // delete clients[clientId];
     });
 });
