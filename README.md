@@ -9,7 +9,7 @@ Tested on:
 `npm install --save ws`
 
 # For Python:  
-`pip install websockets`
+`sudo pip install websocket-client`
 
 # For React-Native  
 - `npm install -g react-native-cli`  
