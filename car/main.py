@@ -3,4 +3,4 @@ from classes.motors import Motors
 
 if __name__ == "__main__":
     motors = Motors()
-    motors.move_left_motor(10, False)
+    motors.move_left_motor(30)

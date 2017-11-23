@@ -1,5 +1,6 @@
 import ConfigParser
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
+import time
 
 class Motors:
     def __init__(self):
@@ -21,16 +22,16 @@ class Motors:
             GPIO.setmode(GPIO.BOARD)
 
             # Setup pins
-            GPIO.setup(PIN_1_LEFT, GPIO.OUT)
-            GPIO.setup(PIN_2_LEFT, GPIO.OUT)
-            GPIO.setup(PIN_PWM_LEFT, GPIO.OUT)
+            GPIO.setup(self.PIN_1_LEFT, GPIO.OUT)
+            GPIO.setup(self.PIN_2_LEFT, GPIO.OUT)
+            GPIO.setup(self.PIN_PWM_LEFT, GPIO.OUT)
 
-            GPIO.setup(PIN_1_RIGHT, GPIO.OUT)
-            GPIO.setup(PIN_2_RIGHT, GPIO.OUT)
-            GPIO.setup(PIN_PWM_RIGHT, GPIO.OUT)
+            GPIO.setup(self.PIN_1_RIGHT, GPIO.OUT)
+            GPIO.setup(self.PIN_2_RIGHT, GPIO.OUT)
+            GPIO.setup(self.PIN_PWM_RIGHT, GPIO.OUT)
 
-            self.PWM_left = GPIO.PWM(PIN_PWM_LEFT, 100)         
-            self.PWM_right = GPIO.PWM(PIN_PWM_RIGHT, 100)
+            self.PWM_left = GPIO.PWM(self.PIN_PWM_LEFT, 100)         
+            self.PWM_right = GPIO.PWM(self.PIN_PWM_RIGHT, 100)
         except Exception as e:
             print e
 
@@ -39,11 +40,57 @@ class Motors:
 
         if forward == True:
             print 'Moving forward with speed ' + str(speed) 
-            GPIO.output(PIN_1_LEFT, False)
-            GPIO.output(PIN_2_LEFT, True)
-            GPIO.output(PIN_PWM_LEFT, True)
+            GPIO.output(self.PIN_1_LEFT, True)
+            GPIO.output(self.PIN_2_LEFT, False)
+            GPIO.output(self.PIN_PWM_LEFT, True) 
+
+            time.sleep(2)
+    
+            GPIO.output(self.PIN_1_LEFT, False)
+            GPIO.output(self.PIN_2_LEFT, False)
+            GPIO.output(self.PIN_PWM_LEFT, False) 
+
+            GPIO.cleanup()
         else:
             print 'Moving backward with speed ' + str(speed) 
-            GPIO.output(PIN_1_LEFT, True)
-            GPIO.output(PIN_2_LEFT, False)
-            GPIO.output(PIN_PWM_LEFT, True)            
+            GPIO.output(self.PIN_1_LEFT, False)
+            GPIO.output(self.PIN_2_LEFT, True)
+            GPIO.output(self.PIN_PWM_LEFT, True)
+
+            time.sleep(2)
+    
+            GPIO.output(self.PIN_1_LEFT, False)
+            GPIO.output(self.PIN_2_LEFT, False)
+            GPIO.output(self.PIN_PWM_LEFT, False) 
+
+            GPIO.cleanup()
+           
+    def move_right_motor(self, speed, forward = True):
+        self.PWM_right.start(speed);
+
+        if forward == True:
+            print 'Moving forward with speed ' + str(speed) 
+            GPIO.output(self.PIN_1_RIGHT, True)
+            GPIO.output(self.PIN_2_RIGHT, False)
+            GPIO.output(self.PIN_PWM_RIGHT, True) 
+
+            time.sleep(2)
+    
+            GPIO.output(self.PIN_1_RIGHT, False)
+            GPIO.output(self.PIN_2_RIGHT, False)
+            GPIO.output(self.PIN_PWM_RIGHT, False) 
+
+            GPIO.cleanup()
+        else:
+            print 'Moving backward with speed ' + str(speed) 
+            GPIO.output(self.PIN_1_RIGHT, False)
+            GPIO.output(self.PIN_2_RIGHT, True)
+            GPIO.output(self.PIN_PWM_RIGHT, True)
+
+            time.sleep(2)
+    
+            GPIO.output(self.PIN_1_RIGHT, False)
+            GPIO.output(self.PIN_2_RIGHT, False)
+            GPIO.output(self.PIN_PWM_RIGHT, False) 
+
+            GPIO.cleanup()
