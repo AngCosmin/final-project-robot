@@ -40,10 +40,6 @@ export default class App extends Component<{}> {
 		};
 	}
 
-	forward() {
-		this.ws.send(JSON.stringify({'event': 'move', 'direction': 'forward'}));
-	}
-
 	move(value) {
 		if (value >= 15) {
 			this.ws.send(JSON.stringify({'event': 'move', 'direction': 'forward'}));		
@@ -56,6 +52,10 @@ export default class App extends Component<{}> {
 		}
 	}
 
+	curve(value) {
+		this.ws.send(JSON.stringify({'event': 'curve', 'angle': value }));
+	}
+
 	render() {
 		return (
 			<View style={ styles.container }>
@@ -65,6 +65,13 @@ export default class App extends Component<{}> {
 					maximumValue={50}
 					value={0}
 					onValueChange={ value => this.move(value) } />
+
+				<Slider style={{ width: '100%' }}
+					step={15}
+					minimumValue={75}
+					maximumValue={165}
+					value={107}
+					onValueChange={ value => this.curve(value) } />
 			</View>
 		);
 	}
@@ -73,6 +80,9 @@ export default class App extends Component<{}> {
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#F5FCFF',
+		flex: 1,
+		flexDirection: 'column',
+        justifyContent: 'space-between',
 	},
 	welcome: {
 		fontSize: 20,

@@ -7,10 +7,9 @@ var carClient = null;
 var commandsHistory = [];
 
 wss.on('connection', function (ws) {
-    // console.log('New connection!');
-
     ws.on('message', function (object) {
         object = JSON.parse(object);
+        console.log(object);
 
         var event = object.event;
 
@@ -43,6 +42,9 @@ wss.on('connection', function (ws) {
                 
                 carClient.send(JSON.stringify(object));
                 commandsHistory.push('stop');
+                break;
+            case 'curve':
+                carClient.send(JSON.stringify(object));
                 break;
             case 'message':
                 console.log('Received: %s', object);
