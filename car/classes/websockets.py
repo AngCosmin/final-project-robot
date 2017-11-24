@@ -51,8 +51,9 @@ class Websockets:
                 motorLeftSpeed = message['motorLeftSpeed']
                 motorRightSpeed = message['motorRightSpeed']
 
-                self.motors.move_left_motor(motorLeftSpeed)
-                self.motors.move_right_motor(motorRightSpeed)
+                self.motors.move_motors(motorLeftSpeed, motorRightSpeed);
+            if event == 'disconnect':
+                self.motors.cleanup_pins()
         except Exception as e:
             print e
 
