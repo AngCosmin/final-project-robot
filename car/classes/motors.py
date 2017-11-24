@@ -58,28 +58,30 @@ class Motors:
     def activate_motor_left_pins(self, forward):
         if forward == True and self.lastMovedDirection == 'backward':
             print '[ML] Setting PINs for direction: forward'
-            GPIO.output(self.PIN_1_LEFT, True)
-            GPIO.output(self.PIN_2_LEFT, False)
-            GPIO.output(self.PIN_PWM_LEFT, True) 
-        elif forward == False and self.lastMovedDirection == 'forward':
-            print '[ML] Setting PINs for direction: backward'            
             GPIO.output(self.PIN_1_LEFT, False)
             GPIO.output(self.PIN_2_LEFT, True)
             GPIO.output(self.PIN_PWM_LEFT, True)
-
+        elif forward == False and self.lastMovedDirection == 'forward':
+            print '[ML] Setting PINs for direction: backward'            
+            GPIO.output(self.PIN_1_LEFT, True)
+            GPIO.output(self.PIN_2_LEFT, False)
+            GPIO.output(self.PIN_PWM_LEFT, True) 
+            
     def activate_motor_right_pins(self, forward):
         if forward == True and self.lastMovedDirection == 'backward':
             print '[MR] Setting PINs for direction: forward'            
-            GPIO.output(self.PIN_1_RIGHT, True)
-            GPIO.output(self.PIN_2_RIGHT, False)
-            GPIO.output(self.PIN_PWM_RIGHT, True) 
-        elif forward == False and self.lastMovedDirection == 'forward':
-            print '[MR] Setting PINs for direction: backward'            
             GPIO.output(self.PIN_1_RIGHT, False)
             GPIO.output(self.PIN_2_RIGHT, True)
             GPIO.output(self.PIN_PWM_RIGHT, True)
-
-    def cleanup_pins():
+        elif forward == False and self.lastMovedDirection == 'forward':
+            print '[MR] Setting PINs for direction: backward'            
+            GPIO.output(self.PIN_1_RIGHT, True)
+            GPIO.output(self.PIN_2_RIGHT, False)
+            GPIO.output(self.PIN_PWM_RIGHT, True) 
+    def cleanup_pins(self):
+        print '[PINS] Cleaning up pins...'
+        GPIO.setmode(GPIO.BOARD)
+        
         # Cleanup PINs for motor left
         GPIO.output(self.PIN_1_LEFT, False)
         GPIO.output(self.PIN_2_LEFT, False)
@@ -92,4 +94,5 @@ class Motors:
 
         time.sleep(1)
         GPIO.cleanup()
+        print '[PINS] Done!'
  
