@@ -52,7 +52,7 @@ class Websockets:
                 motorRightSpeed = message['motorRightSpeed']
 
                 self.motors.move_motors(motorLeftSpeed, motorRightSpeed);
-            if event == 'disconnect':
+            if event == 'clear_pins':
                 self.motors.cleanup_pins()
         except Exception as e:
             print e

@@ -29,6 +29,9 @@ wss.on('connection', function (ws) {
             case 'move':
                 carClient.send(JSON.stringify(object));
                 break;
+            case 'clear_pins':
+                carClient.send(JSON.stringify(object));
+                break;
         }
 
 
