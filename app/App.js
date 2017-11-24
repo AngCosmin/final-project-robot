@@ -89,14 +89,14 @@ export default class App extends Component<{}> {
 		return (
 			<View style={ styles.container }>
 				<Slider style={{ width: '100%' }}
-					step={5}
+					step={2}
 					minimumValue={0}
 					maximumValue={30}
 					value={0}
 					onValueChange={ this.move.bind(this) } />
 
 				<Slider style={{ width: '100%' }}
-					step={10}
+					step={2}
 					minimumValue={-30}
 					maximumValue={30}
 					value={0}
