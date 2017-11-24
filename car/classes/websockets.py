@@ -2,12 +2,15 @@ import ConfigParser
 import websocket
 import thread
 import json
+from motors import Motors
 
 class Websockets:
     ws = None
 
     def __init__(self):
         config = ConfigParser.RawConfigParser()
+
+        self.motors = Motors()
 
         try:
             config.read('./config.cfg')
@@ -45,24 +48,11 @@ class Websockets:
             event = message['event'];
             
             if event == 'move':
-                print ('Move ' + message['direction']) 
-                direction = message['direction']
+                motorLeftSpeed = message['motorLeftSpeed']
+                motorRightSpeed = message['motorRightSpeed']
 
-                # if direction == 'forward':
-                #     GPIO.output(35, True)
-                #     GPIO.output(37, False)
-                # elif direction == 'backward':
-                #     GPIO.output(35, False)
-                #     GPIO.output(37, True)
-            if event == 'curve':
-                angle = _object['angle']
-
-                print ('Curve angle ' + angle)
-            if event == 'stop':
-                print ('Stop')
-
-                # GPIO.output(35, False)
-                # GPIO.output(37, False)
+                self.motors.move_left_motor(motorLeftSpeed)
+                self.motors.move_right_motor(motorRightSpeed)
         except Exception as e:
             print e
 

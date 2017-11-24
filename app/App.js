@@ -8,18 +8,17 @@ import {
 	View
 } from 'react-native';
 
-const instructions = Platform.select({
-	ios: 'Press Cmd+R to reload,\n' +
-		'Cmd+D or shake for dev menu',
-	android: 'Double tap R on your keyboard to reload,\n' +
-		'Shake or press menu button for dev menu',
-});
-
 export default class App extends Component<{}> {	
 	constructor(props) {
 		super(props);
 		
-		// If you are using a real device, don't forget to use the IP from the laptop where the server is running
+		this.state = {
+			speed: 0,
+			motorLeftSpeed: 0,
+			motorRightSpeed: 0,
+			steeringValue: 0,
+		}
+
 		this.ws = new WebSocket('ws://192.168.0.166:3000');
 
 		this.ws.onopen = () => {
@@ -40,38 +39,64 @@ export default class App extends Component<{}> {
 		};
 	}
 
-	move(value) {
-		if (value >= 15) {
-			this.ws.send(JSON.stringify({'event': 'move', 'direction': 'forward'}));		
+	_calculateMotorsSpeed = () => {
+		if (this.state.speed > 0)
+		{
+			if (this.state.steeringValue > 0) {
+				this.state.motorRightSpeed = this.state.speed + this.state.steeringValue;
+			}
+			else if (this.state.steeringValue == 0) {
+				this.state.motorRightSpeed = this.state.speed;
+				this.state.motorLeftSpeed = this.state.speed;
+			}
+			else {
+				this.state.motorLeftSpeed = this.state.speed + (-this.state.steeringValue);
+			}
 		}
-		else if (value <= -15) {
-			this.ws.send(JSON.stringify({'event': 'move', 'direction': 'backward'}));					
+		else 
+		{
+			this.state.motorRightSpeed = 0;
+			this.state.motorLeftSpeed = 0;
 		}
-		else {
-			this.ws.send(JSON.stringify({'event': 'stop'}));					
-		}
+		
+		console.log('Motor left speed ' + this.state.motorLeftSpeed + ' Motor right speed ' + this.state.motorRightSpeed);		
 	}
 
-	curve(value) {
-		this.ws.send(JSON.stringify({'event': 'curve', 'angle': value }));
+	_sendMotorSpeedToServer = () => {
+		let motorLeftSpeed = this.state.motorLeftSpeed;
+		let motorRightSpeed = this.state.motorRightSpeed;
+		
+		this.ws.send(JSON.stringify({ 'event': 'move', 'motorLeftSpeed': motorLeftSpeed, 'motorRightSpeed': motorRightSpeed }));
+	}
+
+	move = (value) => {
+		this.state.speed = value;
+		this._calculateMotorsSpeed();
+		this._sendMotorSpeedToServer();
+	}
+
+	steering = (value) => {
+		this.state.steeringValue = value;
+		this._calculateMotorsSpeed();
+		this._sendMotorSpeedToServer();
 	}
 
 	render() {
 		return (
 			<View style={ styles.container }>
 				<Slider style={{ width: '100%' }}
-					step={1}
+					step={10}
+					minimumValue={0}
+					maximumValue={50}
+					value={0}
+					onValueChange={ this.move.bind(this) } />
+
+				<Slider style={{ width: '100%' }}
+					step={10}
 					minimumValue={-50}
 					maximumValue={50}
 					value={0}
-					onValueChange={ value => this.move(value) } />
-
-				<Slider style={{ width: '100%' }}
-					step={15}
-					minimumValue={75}
-					maximumValue={165}
-					value={107}
-					onValueChange={ value => this.curve(value) } />
+					onValueChange={ this.steering.bind(this) } />
 			</View>
 		);
 	}

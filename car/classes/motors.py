@@ -1,5 +1,5 @@
 import ConfigParser
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import time
 
 class Motors:
@@ -18,79 +18,44 @@ class Motors:
             self.PIN_2_RIGHT = config.getint('MotorRight', 'pin_2')
             self.PIN_PWM_RIGHT = config.getint('MotorRight', 'pin_pwm')
 
-            # Set GPIO mode
-            GPIO.setmode(GPIO.BOARD)
+            # # Set GPIO mode
+            # GPIO.setmode(GPIO.BOARD)
 
-            # Setup pins
-            GPIO.setup(self.PIN_1_LEFT, GPIO.OUT)
-            GPIO.setup(self.PIN_2_LEFT, GPIO.OUT)
-            GPIO.setup(self.PIN_PWM_LEFT, GPIO.OUT)
+            # # Setup pins
+            # GPIO.setup(self.PIN_1_LEFT, GPIO.OUT)
+            # GPIO.setup(self.PIN_2_LEFT, GPIO.OUT)
+            # GPIO.setup(self.PIN_PWM_LEFT, GPIO.OUT)
 
-            GPIO.setup(self.PIN_1_RIGHT, GPIO.OUT)
-            GPIO.setup(self.PIN_2_RIGHT, GPIO.OUT)
-            GPIO.setup(self.PIN_PWM_RIGHT, GPIO.OUT)
+            # GPIO.setup(self.PIN_1_RIGHT, GPIO.OUT)
+            # GPIO.setup(self.PIN_2_RIGHT, GPIO.OUT)
+            # GPIO.setup(self.PIN_PWM_RIGHT, GPIO.OUT)
 
-            self.PWM_left = GPIO.PWM(self.PIN_PWM_LEFT, 100)         
-            self.PWM_right = GPIO.PWM(self.PIN_PWM_RIGHT, 100)
+            # self.PWM_left = GPIO.PWM(self.PIN_PWM_LEFT, 100)         
+            # self.PWM_right = GPIO.PWM(self.PIN_PWM_RIGHT, 100)
+
+            # self.PWM_left.start(0);
+            # self.PWM_right.start(0);            
         except Exception as e:
             print e
 
     def move_left_motor(self, speed, forward = True):
-        self.PWM_left.start(speed);
+        print 'Moving motor left with speed ' + str(speed)  
+        # if forward == True:
+        #     GPIO.output(self.PIN_1_LEFT, True)
+        #     GPIO.output(self.PIN_2_LEFT, False)
+        #     GPIO.output(self.PIN_PWM_LEFT, True) 
+        # else:
+        #     GPIO.output(self.PIN_1_LEFT, False)
+        #     GPIO.output(self.PIN_2_LEFT, True)
+        #     GPIO.output(self.PIN_PWM_LEFT, True)
 
-        if forward == True:
-            print 'Moving forward with speed ' + str(speed) 
-            GPIO.output(self.PIN_1_LEFT, True)
-            GPIO.output(self.PIN_2_LEFT, False)
-            GPIO.output(self.PIN_PWM_LEFT, True) 
-
-            time.sleep(2)
-    
-            GPIO.output(self.PIN_1_LEFT, False)
-            GPIO.output(self.PIN_2_LEFT, False)
-            GPIO.output(self.PIN_PWM_LEFT, False) 
-
-            GPIO.cleanup()
-        else:
-            print 'Moving backward with speed ' + str(speed) 
-            GPIO.output(self.PIN_1_LEFT, False)
-            GPIO.output(self.PIN_2_LEFT, True)
-            GPIO.output(self.PIN_PWM_LEFT, True)
-
-            time.sleep(2)
-    
-            GPIO.output(self.PIN_1_LEFT, False)
-            GPIO.output(self.PIN_2_LEFT, False)
-            GPIO.output(self.PIN_PWM_LEFT, False) 
-
-            GPIO.cleanup()
-           
     def move_right_motor(self, speed, forward = True):
-        self.PWM_right.start(speed);
-
-        if forward == True:
-            print 'Moving forward with speed ' + str(speed) 
-            GPIO.output(self.PIN_1_RIGHT, True)
-            GPIO.output(self.PIN_2_RIGHT, False)
-            GPIO.output(self.PIN_PWM_RIGHT, True) 
-
-            time.sleep(2)
-    
-            GPIO.output(self.PIN_1_RIGHT, False)
-            GPIO.output(self.PIN_2_RIGHT, False)
-            GPIO.output(self.PIN_PWM_RIGHT, False) 
-
-            GPIO.cleanup()
-        else:
-            print 'Moving backward with speed ' + str(speed) 
-            GPIO.output(self.PIN_1_RIGHT, False)
-            GPIO.output(self.PIN_2_RIGHT, True)
-            GPIO.output(self.PIN_PWM_RIGHT, True)
-
-            time.sleep(2)
-    
-            GPIO.output(self.PIN_1_RIGHT, False)
-            GPIO.output(self.PIN_2_RIGHT, False)
-            GPIO.output(self.PIN_PWM_RIGHT, False) 
-
-            GPIO.cleanup()
+        print 'Moving motor right with speed ' + str(speed)
+        # if forward == True:
+        #     GPIO.output(self.PIN_1_RIGHT, True)
+        #     GPIO.output(self.PIN_2_RIGHT, False)
+        #     GPIO.output(self.PIN_PWM_RIGHT, True) 
+        # else:
+        #     GPIO.output(self.PIN_1_RIGHT, False)
+        #     GPIO.output(self.PIN_2_RIGHT, True)
+        #     GPIO.output(self.PIN_PWM_RIGHT, True)
