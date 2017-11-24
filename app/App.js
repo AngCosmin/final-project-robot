@@ -19,7 +19,7 @@ export default class App extends Component<{}> {
 			steeringValue: 0,
 		}
 
-		this.ws = new WebSocket('ws://192.168.0.166:3000');
+		this.ws = new WebSocket('ws://192.168.0.157:3000');
 
 		this.ws.onopen = () => {
 			this.ws.send(JSON.stringify({'event': 'connection', 'client': 'React Native'}));
@@ -42,6 +42,10 @@ export default class App extends Component<{}> {
 	_calculateMotorsSpeed = () => {
 		if (this.state.speed > 0)
 		{
+			if (this.state.speed < 15) {
+				this.state.speed = 15;
+			}
+
 			if (this.state.steeringValue > 0) {
 				this.state.motorRightSpeed = this.state.speed + this.state.steeringValue;
 			}
@@ -85,16 +89,16 @@ export default class App extends Component<{}> {
 		return (
 			<View style={ styles.container }>
 				<Slider style={{ width: '100%' }}
-					step={10}
+					step={5}
 					minimumValue={0}
-					maximumValue={50}
+					maximumValue={30}
 					value={0}
 					onValueChange={ this.move.bind(this) } />
 
 				<Slider style={{ width: '100%' }}
 					step={10}
-					minimumValue={-50}
-					maximumValue={50}
+					minimumValue={-30}
+					maximumValue={30}
 					value={0}
 					onValueChange={ this.steering.bind(this) } />
 			</View>
