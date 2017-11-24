@@ -1,6 +1,5 @@
-from time import sleep
-from classes.motors import Motors
+# from classes.motors import Motors
+from classes.websockets import Websockets
 
 if __name__ == "__main__":
-    motors = Motors()
-    motors.move_left_motor(30)
+    websockets = Websockets()
