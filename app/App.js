@@ -5,7 +5,8 @@ import {
 	Button,
 	Slider,
 	Text,
-	View
+	View,
+	TouchableHighlight
 } from 'react-native';
 
 export default class App extends Component<{}> {	
@@ -73,6 +74,10 @@ export default class App extends Component<{}> {
 		this.ws.send(JSON.stringify({ 'event': 'move', 'motorLeftSpeed': motorLeftSpeed, 'motorRightSpeed': motorRightSpeed }));
 	}
 
+	_clearPins = () => {
+		this.ws.send(JSON.stringify({ 'event': 'clear_pins' }));
+	}
+
 	move = (value) => {
 		this.state.speed = value;
 		this._calculateMotorsSpeed();
@@ -95,6 +100,12 @@ export default class App extends Component<{}> {
 					value={0}
 					onValueChange={ this.move.bind(this) } />
 
+				<Button
+					onPress= { this._clearPins }
+					style={ styles.button }
+					title="Clear PINs"
+					color="#841584"/>
+
 				<Slider style={{ width: '100%' }}
 					step={2}
 					minimumValue={-30}
@@ -112,6 +123,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'column',
         justifyContent: 'space-between',
+	},
+	button: {
+		transform: [{ rotate: '90deg'}],
 	},
 	welcome: {
 		fontSize: 20,
