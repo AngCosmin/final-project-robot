@@ -78,6 +78,18 @@ export default class App extends Component<{}> {
 		this.ws.send(JSON.stringify({ 'event': 'clear_pins' }));
 	}
 
+	_speedSliderRelease = (event) => {
+		console.log('Speed slider release');
+		this.state.speed = 0;
+		this._speedSlider.setNativeProps({ value: 0 });
+	}
+
+	_steeringSliderRelease = (event) => {
+		console.log('Steering slider release');
+		this.state.steeringValue = 0;
+		this._steeringSlider.setNativeProps({ value: 0 });
+	}
+
 	move = (value) => {
 		this.state.speed = value;
 		this._calculateMotorsSpeed();
@@ -93,25 +105,39 @@ export default class App extends Component<{}> {
 	render() {
 		return (
 			<View style={ styles.container }>
-				<Slider style={{ width: '100%' }}
-					step={2}
-					minimumValue={0}
-					maximumValue={30}
-					value={0}
-					onValueChange={ this.move.bind(this) } />
+				<View style={ styles.joystick }>
+					<Slider style={ styles.slider }
+						step={ 2 }
+						minimumValue={ 0 }
+						maximumValue={ 30 }
+						ref={component => this._speedSlider = component}
+						minimumTrackTintColor='#16a085'
+						thumbTintColor='#16a085'
+						value={ this.state.speed }
+						onValueChange={ this.move.bind(this) }
+						onSlidingComplete={ this._speedSliderRelease.bind(this) } />
+				</View>
 
-				<Button
-					onPress= { this._clearPins }
-					style={ styles.button }
-					title="Clear PINs"
-					color="#841584"/>
-
-				<Slider style={{ width: '100%' }}
-					step={2}
-					minimumValue={-30}
-					maximumValue={30}
-					value={0}
-					onValueChange={ this.steering.bind(this) } />
+				<View style={ styles.camera }>
+					<Button
+						onPress= { this._clearPins }
+						style={ styles.button }
+						title="Clear PINs"
+						color="#841584"/>
+				</View>
+				
+				<View style={ styles.options }>
+					<Slider style={ styles.slider }
+						step={2}
+						minimumValue={-30}
+						maximumValue={30}
+						ref={component => this._steeringSlider = component}
+						minimumTrackTintColor='#16a085'
+						thumbTintColor='#16a085'
+						value={ 0 }
+						onValueChange={ this.steering.bind(this) }
+						onSlidingComplete={ this._steeringSliderRelease.bind(this) } />
+				</View>
 			</View>
 		);
 	}
@@ -122,14 +148,23 @@ const styles = StyleSheet.create({
 		backgroundColor: '#F5FCFF',
 		flex: 1,
 		flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
 	},
-	button: {
-		transform: [{ rotate: '90deg'}],
+	slider: {
+		height: 100,
+	
 	},
-	welcome: {
-		fontSize: 20,
-		textAlign: 'center',
-		margin: 10,
+	joystick: {
+		flex: 0.3,
+		backgroundColor: '#bdc3c7',
 	},
+	camera: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	options: {
+		flex: 0.3,
+		backgroundColor: '#bdc3c7',
+	}
 });
