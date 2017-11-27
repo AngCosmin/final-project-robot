@@ -20,7 +20,7 @@ export default class App extends Component<{}> {
 			steeringValue: 0,
 		}
 
-		this.ws = new WebSocket('ws://192.168.43.139:3000');
+		this.ws = new WebSocket('ws://192.168.0.173:3000');
 
 		this.ws.onopen = () => {
 			this.ws.send(JSON.stringify({'event': 'connection', 'client': 'React Native'}));
@@ -40,67 +40,31 @@ export default class App extends Component<{}> {
 		};
 	}
 
-	_calculateMotorsSpeed = () => {
-		if (this.state.speed > 0)
-		{
-			if (this.state.speed < 15) {
-				this.state.speed = 15;
-			}
-
-			if (this.state.steeringValue > 0) {
-				this.state.motorRightSpeed = this.state.speed + this.state.steeringValue;
-			}
-			else if (this.state.steeringValue == 0) {
-				this.state.motorRightSpeed = this.state.speed;
-				this.state.motorLeftSpeed = this.state.speed;
-			}
-			else {
-				this.state.motorLeftSpeed = this.state.speed + (-this.state.steeringValue);
-			}
-		}
-		else 
-		{
-			this.state.motorRightSpeed = 0;
-			this.state.motorLeftSpeed = 0;
-		}
-		
-		console.log('Motor left speed ' + this.state.motorLeftSpeed + ' Motor right speed ' + this.state.motorRightSpeed);		
-	}
-
-	_sendMotorSpeedToServer = () => {
-		let motorLeftSpeed = this.state.motorLeftSpeed;
-		let motorRightSpeed = this.state.motorRightSpeed;
-		
-		this.ws.send(JSON.stringify({ 'event': 'move', 'motorLeftSpeed': motorLeftSpeed, 'motorRightSpeed': motorRightSpeed }));
-	}
-
 	_clearPins = () => {
 		this.ws.send(JSON.stringify({ 'event': 'clear_pins' }));
 	}
 
-	_speedSliderRelease = (event) => {
-		console.log('Speed slider release');
+	_sendSlidersValueToServer = (speedSliderValue, steeringSliderValue) => {
+		this.ws.send(JSON.stringify({ 'event': 'move', 'speedSliderValue': speedSliderValue, 'steeringSliderValue': steeringSliderValue }));		
+	}
 
+	_speedSliderRelease = (event) => {
 		// Set speed to zero
 		this.state.speed = 0;
 
-		// Calculate the motors speed and then send the speed to server
-		this._calculateMotorsSpeed();
-		this._sendMotorSpeedToServer();
+		// Send new slider values to server
+		this._sendSlidersValueToServer(this.state.speed, this.state.steeringValue);
 
 		// Set speed slider to value zero
 		this._speedSlider.setNativeProps({ value: 0 });
 	}
 
 	_steeringSliderRelease = (event) => {
-		console.log('Steering slider release');
-		
 		// Set speed to zero
 		this.state.steeringValue = 0;
 
-		// Calculate the motors speed and then send the speed to server
-		this._calculateMotorsSpeed();
-		this._sendMotorSpeedToServer();
+		// Send new slider values to server
+		this._sendSlidersValueToServer(this.state.speed, this.state.steeringValue);
 
 		// Set speed slider to value zero
 		this._steeringSlider.setNativeProps({ value: 0 });
@@ -108,24 +72,26 @@ export default class App extends Component<{}> {
 
 	move = (value) => {
 		this.state.speed = value;
-		this._calculateMotorsSpeed();
-		this._sendMotorSpeedToServer();
+		
+		// Send new slider values to server
+		this._sendSlidersValueToServer(this.state.speed, this.state.steeringValue);
 	}
 
 	steering = (value) => {
 		this.state.steeringValue = value;
-		this._calculateMotorsSpeed();
-		this._sendMotorSpeedToServer();
+		
+		// Send new slider values to server
+		this._sendSlidersValueToServer(this.state.speed, this.state.steeringValue);
 	}
 
 	render() {
 		return (
 			<View style={ styles.container }>
-				<View style={ styles.joystick }>
-					<Slider style={ styles.slider }
+				<View style={ styles.speedContainer }>
+					<Slider style={ styles.sliderSpeed }
 						step={ 2 }
-						minimumValue={ 0 }
-						maximumValue={ 30 }
+						minimumValue={ 20 }
+						maximumValue={ 70 }
 						ref={component => this._speedSlider = component}
 						minimumTrackTintColor='#16a085'
 						thumbTintColor='#16a085'
@@ -142,8 +108,8 @@ export default class App extends Component<{}> {
 						color="#841584"/>
 				</View>
 				
-				<View style={ styles.options }>
-					<Slider style={ styles.slider }
+				<View style={ styles.steeringContainer }>
+					<Slider style={ styles.sliderSteering }
 						step={2}
 						minimumValue={-30}
 						maximumValue={30}
@@ -161,26 +127,34 @@ export default class App extends Component<{}> {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: '#F5FCFF',
+		backgroundColor: '#FFF',
 		flex: 1,
-		flexDirection: 'column',
+		flexDirection: 'row',
         justifyContent: 'center',
 	},
-	slider: {
-		height: 100,
-	
+	sliderSpeed: {
+		width: 300,
+		transform: [{ rotate: '-90deg' }, { scaleY: 3 }]
 	},
-	joystick: {
+	sliderSteering: {
+		height: 200,
+		width: '100%',
+	},
+	speedContainer: {
 		flex: 0.3,
-		backgroundColor: '#bdc3c7',
+		flexDirection: 'row',
+        justifyContent: 'center',
+		backgroundColor: '#F2F2F2',
+	},
+	steeringContainer: {
+		flex: 0.5,
+		flexDirection: 'column',
+        justifyContent: 'center',
+		backgroundColor: '#F2F2F2',
 	},
 	camera: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	options: {
-		flex: 0.3,
-		backgroundColor: '#bdc3c7',
-	}
 });
