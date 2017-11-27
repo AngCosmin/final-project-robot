@@ -20,7 +20,7 @@ export default class App extends Component<{}> {
 			steeringValue: 0,
 		}
 
-		this.ws = new WebSocket('ws://192.168.0.157:3000');
+		this.ws = new WebSocket('ws://192.168.43.139:3000');
 
 		this.ws.onopen = () => {
 			this.ws.send(JSON.stringify({'event': 'connection', 'client': 'React Native'}));
@@ -80,13 +80,29 @@ export default class App extends Component<{}> {
 
 	_speedSliderRelease = (event) => {
 		console.log('Speed slider release');
+
+		// Set speed to zero
 		this.state.speed = 0;
+
+		// Calculate the motors speed and then send the speed to server
+		this._calculateMotorsSpeed();
+		this._sendMotorSpeedToServer();
+
+		// Set speed slider to value zero
 		this._speedSlider.setNativeProps({ value: 0 });
 	}
 
 	_steeringSliderRelease = (event) => {
 		console.log('Steering slider release');
+		
+		// Set speed to zero
 		this.state.steeringValue = 0;
+
+		// Calculate the motors speed and then send the speed to server
+		this._calculateMotorsSpeed();
+		this._sendMotorSpeedToServer();
+
+		// Set speed slider to value zero
 		this._steeringSlider.setNativeProps({ value: 0 });
 	}
 
