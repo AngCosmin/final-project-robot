@@ -6,38 +6,73 @@ import {
 	Slider,
 	Text,
 	View,
-	TouchableHighlight
+	TouchableHighlight,
+	Image,
+	Animated,
+	PanResponder,
 } from 'react-native';
 
-export default class App extends Component<{}> {	
+export default class App extends Component<{}> {
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			speed: 0,
 			motorLeftSpeed: 0,
 			motorRightSpeed: 0,
 			steeringValue: 0,
+			pan: new Animated.ValueXY(),
+			scale: new Animated.Value(0.5),
 		}
 
-		this.ws = new WebSocket('ws://192.168.0.173:3000');
+		this.ws = new WebSocket('ws://192.168.100.2:3000');
 
 		this.ws.onopen = () => {
-			this.ws.send(JSON.stringify({'event': 'connection', 'client': 'React Native'}));
+			this.ws.send(JSON.stringify({ 'event': 'connection', 'client': 'React Native' }));
 		};
 
 		this.ws.onmessage = (e) => {
 			console.log('SERVER' + e.data);
 		};
-		
+
 		this.ws.onerror = (e) => {
 			console.log(e);
 		};
-		
+
 		this.ws.onclose = (e) => {
 			this.ws.send('close');
 			console.log(e.code, e.reason);
 		};
+	}
+
+	componentWillMount() {
+		this._panResponder = PanResponder.create({
+			onMoveShouldSetResponderCapture: () => true,
+			onMoveShouldSetPanResponderCapture: () => true,
+
+			// Executed on start
+			onPanResponderGrant: (e, gestureState) => {
+				this.state.pan.setOffset({ x: this.state.pan.x._value, y: this.state.pan.y._value });
+				this.state.pan.setValue({ x: 0, y: 0 });
+			},
+
+			// Executed on move
+			onPanResponderMove: (e, gestureState) => {
+				console.log(`x = ${this.state.pan.x._value} y = ${this.state.pan.y._value}`);
+
+				// Animate the button move
+				return Animated.event([
+					null, { dx: this.state.pan.x, dy: this.state.pan.y },
+				])(e, gestureState);
+			},
+
+			// Executed on release
+			onPanResponderRelease: (e, { vx, vy }) => {
+				this.state.pan.setValue({ x: 0, y: 0 });
+				this.state.pan.flattenOffset();
+				console.log(`x = ${this.state.pan.x._value} y = ${this.state.pan.y._value}`);				
+			}
+		});
 	}
 
 	_clearPins = () => {
@@ -45,80 +80,28 @@ export default class App extends Component<{}> {
 	}
 
 	_sendSlidersValueToServer = (speedSliderValue, steeringSliderValue) => {
-		this.ws.send(JSON.stringify({ 'event': 'move', 'speedSliderValue': speedSliderValue, 'steeringSliderValue': steeringSliderValue }));		
-	}
-
-	_speedSliderRelease = (event) => {
-		// Set speed to zero
-		this.state.speed = 0;
-
-		// Send new slider values to server
-		this._sendSlidersValueToServer(this.state.speed, this.state.steeringValue);
-
-		// Set speed slider to value zero
-		this._speedSlider.setNativeProps({ value: 0 });
-	}
-
-	_steeringSliderRelease = (event) => {
-		// Set speed to zero
-		this.state.steeringValue = 0;
-
-		// Send new slider values to server
-		this._sendSlidersValueToServer(this.state.speed, this.state.steeringValue);
-
-		// Set speed slider to value zero
-		this._steeringSlider.setNativeProps({ value: 0 });
-	}
-
-	move = (value) => {
-		this.state.speed = value;
-		
-		// Send new slider values to server
-		this._sendSlidersValueToServer(this.state.speed, this.state.steeringValue);
-	}
-
-	steering = (value) => {
-		this.state.steeringValue = value;
-		
-		// Send new slider values to server
-		this._sendSlidersValueToServer(this.state.speed, this.state.steeringValue);
+		this.ws.send(JSON.stringify({ 'event': 'move', 'speedSliderValue': speedSliderValue, 'steeringSliderValue': steeringSliderValue }));
 	}
 
 	render() {
+		let { pan, scale } = this.state;
+		let [translateX, translateY] = [pan.x, pan.y];
+		let imageStyle = { transform: [{ translateX }, { translateY }, { scale }] };
+
 		return (
-			<View style={ styles.container }>
-				<View style={ styles.speedContainer }>
-					<Slider style={ styles.sliderSpeed }
-						step={ 2 }
-						minimumValue={ 20 }
-						maximumValue={ 70 }
-						ref={component => this._speedSlider = component}
-						minimumTrackTintColor='#16a085'
-						thumbTintColor='#16a085'
-						value={ this.state.speed }
-						onValueChange={ this.move.bind(this) }
-						onSlidingComplete={ this._speedSliderRelease.bind(this) } />
+			<View style={styles.container}>
+				<View style={ styles.joystickContainer }>
+					<Animated.View style={ imageStyle } {...this._panResponder.panHandlers}>
+						<Image source={ require('./src/assets/pan.png') } />
+					</Animated.View>
 				</View>
 
-				<View style={ styles.camera }>
+				<View style={styles.cameraContainer}>
 					<Button
-						onPress= { this._clearPins }
-						style={ styles.button }
+						onPress={this._clearPins}
+						style={styles.button}
 						title="Clear PINs"
-						color="#841584"/>
-				</View>
-				
-				<View style={ styles.steeringContainer }>
-					<Slider style={ styles.sliderSteering }
-						step={2}
-						minimumValue={-30}
-						maximumValue={30}
-						ref={component => this._steeringSlider = component}
-						minimumTrackTintColor='#16a085'
-						thumbTintColor='#16a085'
-						value={ 0 }
-						onValueChange={ this.steering.bind(this) }
-						onSlidingComplete={ this._steeringSliderRelease.bind(this) } />
+						color="#841584" />
 				</View>
 			</View>
 		);
@@ -130,30 +113,15 @@ const styles = StyleSheet.create({
 		backgroundColor: '#FFF',
 		flex: 1,
 		flexDirection: 'row',
-        justifyContent: 'center',
+		justifyContent: 'center',
 	},
-	sliderSpeed: {
-		width: 300,
-		transform: [{ rotate: '-90deg' }, { scaleY: 3 }]
-	},
-	sliderSteering: {
-		height: 200,
-		width: '100%',
-	},
-	speedContainer: {
-		flex: 0.3,
-		flexDirection: 'row',
-        justifyContent: 'center',
-		backgroundColor: '#F2F2F2',
-	},
-	steeringContainer: {
+	joystickContainer: {
 		flex: 0.5,
-		flexDirection: 'column',
-        justifyContent: 'center',
+		justifyContent: 'center',
 		backgroundColor: '#F2F2F2',
 	},
-	camera: {
-		flex: 1,
+	cameraContainer: {
+		flex: 0.5,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
