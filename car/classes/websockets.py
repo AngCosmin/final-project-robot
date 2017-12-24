@@ -46,7 +46,7 @@ class Websockets:
     def on_message(self, ws, message):
         try:
             message = json.loads(message)
-            event = message['event'];
+            event = message['event']
             
             if event == 'move':
                 motorLeftSpeed = message['motorLeftSpeed']

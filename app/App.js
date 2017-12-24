@@ -136,7 +136,7 @@ export default class App extends Component<{}> {
 		}
 
 		// Set button text
-		this.setState({motorsStatus: this.state.motorsStatus})
+		this.setState({motorsStatus: this.state.motorsStatus});
 
 		this.ws.send(JSON.stringify({
 			'event': 'turn_motors',
