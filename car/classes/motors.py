@@ -20,6 +20,8 @@ class Motors:
             self.PIN_2_RIGHT = config.getint('MotorRight', 'pin_2')
             self.PIN_PWM_RIGHT = config.getint('MotorRight', 'pin_pwm')
 
+            self.PIN_RELAY = config.getint('Relay', 'pin')
+
             # Set GPIO mode
             GPIO.setmode(GPIO.BOARD)
 
@@ -31,6 +33,8 @@ class Motors:
             GPIO.setup(self.PIN_1_RIGHT, GPIO.OUT)
             GPIO.setup(self.PIN_2_RIGHT, GPIO.OUT)
             GPIO.setup(self.PIN_PWM_RIGHT, GPIO.OUT)
+
+            GPIO.setup(self.PIN_RELAY, GPIO.OUT)
 
             self.PWM_left = GPIO.PWM(self.PIN_PWM_LEFT, 100)         
             self.PWM_right = GPIO.PWM(self.PIN_PWM_RIGHT, 100)
@@ -80,19 +84,28 @@ class Motors:
             GPIO.output(self.PIN_1_RIGHT, True)
             GPIO.output(self.PIN_2_RIGHT, False)
             GPIO.output(self.PIN_PWM_RIGHT, True) 
+    
+    def toggleMotors(self, status):
+        if status == 'on': 
+            GPIO.output(self.PIN_RELAY, GPIO.LOW)
+        else:
+            GPIO.output(self.PIN_RELAY, GPIO.HIGH)
+
     def cleanup_pins(self):
         print '[PINS] Cleaning up pins...'
         GPIO.setmode(GPIO.BOARD)
         
         # Cleanup PINs for motor left
-        GPIO.output(self.PIN_1_LEFT, False)
-        GPIO.output(self.PIN_2_LEFT, False)
-        GPIO.output(self.PIN_PWM_LEFT, False) 
+        GPIO.output(self.PIN_1_LEFT, GPIO.LOW)
+        GPIO.output(self.PIN_2_LEFT, GPIO.LOW)
+        GPIO.output(self.PIN_PWM_LEFT, GPIO.LOW) 
 
         # Cleanup PINs for motor right
-        GPIO.output(self.PIN_1_RIGHT, False)
-        GPIO.output(self.PIN_2_RIGHT, False)
-        GPIO.output(self.PIN_PWM_RIGHT, False)
+        GPIO.output(self.PIN_1_RIGHT, GPIO.LOW)
+        GPIO.output(self.PIN_2_RIGHT, GPIO.LOW)
+        GPIO.output(self.PIN_PWM_RIGHT, GPIO.LOW)
+
+        GPIO.output(self.PIN_RELAY, GPIO.HIGH)
 
         time.sleep(1)
         GPIO.cleanup()

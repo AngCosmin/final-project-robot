@@ -29,10 +29,8 @@ wss.on('connection', function (ws) {
             case 'move':
                 sendMotorsSpeedToCar(object);
                 break;
-            case 'clear_pins':
-                if (carClient) {
-                    carClient.send(JSON.stringify(object));
-                }
+            case 'turn_motors':
+                sendMotorsStatusToCar(object);
                 break;
         }
     });
@@ -47,15 +45,14 @@ wss.on('connection', function (ws) {
 function sendMotorsSpeedToCar(object)
 {
     // If the car is connected
-    if (carClient)
-    {
-        var motorsSpeed = calculateMotorsSpeed(object);
+    if (carClient) {
+        var motorsSpeed = _calculateMotorsSpeed(object);
 
         carClient.send(JSON.stringify({ 'event': 'move', 'motorLeftSpeed': motorsSpeed.left, 'motorRightSpeed': motorsSpeed.right }));
     }
 }
 
-function calculateMotorsSpeed(object)
+function _calculateMotorsSpeed(object)
 {
     // Get data from object
     let max_value = object.joystick_max_value;
@@ -148,4 +145,14 @@ function calculateMotorsSpeed(object)
     motorsSpeed.right = parseInt(motorsSpeed.right);
 
     return motorsSpeed;
+}
+
+function sendMotorsStatusToCar(object)
+{
+    // If the car is connected
+    if (carClient) {
+        var motorsStatus = object.status;
+
+        carClient.send(JSON.stringify({ 'event': 'turn_motors', 'status': motorsStatus }));
+    }
 }

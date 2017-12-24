@@ -53,8 +53,8 @@ class Websockets:
                 motorRightSpeed = message['motorRightSpeed']
 
                 self.motors.move_motors(motorLeftSpeed, motorRightSpeed);
-            if event == 'clear_pins':
-                self.motors.cleanup_pins()
+            elif event == 'turn_motors':
+                
         except Exception as e:
             print e
 

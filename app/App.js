@@ -17,10 +17,7 @@ export default class App extends Component<{}> {
 		super(props);
 
 		this.state = {
-			speed: 0,
-			motorLeftSpeed: 0,
-			motorRightSpeed: 0,
-			steeringValue: 0,
+			motorsStatus: 'off',
 			joystick: { 
 				x: 0, 
 				y: 0,
@@ -128,6 +125,25 @@ export default class App extends Component<{}> {
 		}));
 	}
 
+	toggleMotorsStatus = () =>
+	{
+		// Toggle
+		if (this.state.motorsStatus === 'off') {
+			this.state.motorsStatus = 'on';
+		}
+		else {
+			this.state.motorsStatus = 'off';
+		}
+
+		// Set button text
+		this.setState({motorsStatus: this.state.motorsStatus})
+
+		this.ws.send(JSON.stringify({
+			'event': 'turn_motors',
+			'status': this.state.motorsStatus
+		}));
+	}
+
 	render() 
 	{
 		let { pan, scale } = this.state;
@@ -135,16 +151,30 @@ export default class App extends Component<{}> {
 		let imageStyle = { transform: [{ translateX }, { translateY }, { scale }] };
 
 		return (
-			<View style={styles.container}>
-				<View style={styles.joystickContainer}>
-					<View style={styles.circle} scrollEnabled={false}>
-						<Animated.View style={imageStyle} {...this._panResponder.panHandlers}>
-							<Image source={require('./src/assets/pan.png')} />
-						</Animated.View>
+			<View style={styles.container}>			
+				<View style={styles.topContainer}>
+					<View style={styles.section}>			
+						<Text>Speed level</Text>
+						<Button onPress={null} title="Slow" color="#373D3F"></Button>
+						<Button onPress={null} title="Medium" color="#373D3F"></Button>
+						<Button onPress={null} title="Fast" color="#373D3F"></Button>
+					</View>
+					<View style={styles.section}>			
+						<Text>Motors</Text>
+						<Button onPress={this.toggleMotorsStatus} title={this.state.motorsStatus} color="#373D3F"></Button>
 					</View>
 				</View>
+				<View style={styles.bottomContainer}>				
+					<View style={styles.joystickContainer}>
+						<View style={styles.circle} scrollEnabled={false}>
+							<Animated.View style={imageStyle} {...this._panResponder.panHandlers}>
+								<Image source={require('./src/assets/pan.png')} />
+							</Animated.View>
+						</View>
+					</View>
 
-				<View style={styles.cameraContainer}>
+					<View style={styles.cameraContainer}>
+					</View>
 				</View>
 			</View>
 		);
@@ -153,27 +183,38 @@ export default class App extends Component<{}> {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: '#FFF',
 		flex: 1,
+		flexDirection: 'column',
+	},
+	topContainer: {
+		flex: 0.1,
 		flexDirection: 'row',
-		justifyContent: 'center',
+		justifyContent: 'space-around',
+		alignItems: 'center',		
+	},
+	bottomContainer: {
+		flex: 0.9,
+		flexDirection: 'row',
 	},
 	joystickContainer: {
-		flex: 0.5,
+		flex: 0.45,
 		justifyContent: 'center',
-		backgroundColor: '#F2F2F2',
 	},
 	cameraContainer: {
-		flex: 0.5,
-		justifyContent: 'center',
+		flex: 0.55,
+	},
+	section: {
+		flexDirection: 'row',
 		alignItems: 'center',
 	},
 	circle: {
-		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center',		
+		justifyContent: 'flex-end',		
 		borderRadius: 300,
-		borderWidth: 1,
-		borderColor:'rgba(0,0,0,0.2)',
-	}
+		borderWidth: 2,
+		width: 270,
+		height: 270,
+		borderColor:'rgba(0,0,0,0.1)',
+		backgroundColor: '#FFFFFF'
+	},
 });
