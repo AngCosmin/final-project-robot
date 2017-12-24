@@ -40,40 +40,36 @@ class Motors:
         except Exception as e:
             print e
 
-    def move_motors(self, motorLeftSpeed, motorRightSpeed, forward = True):
+    def move_motors(self, motorLeftSpeed, motorRightSpeed):
         print 'Motor left speed ' + str(motorLeftSpeed) + ' Motor right speed ' + str(motorRightSpeed)  
 
         self.PWM_left.ChangeDutyCycle(motorLeftSpeed)
         self.PWM_right.ChangeDutyCycle(motorRightSpeed)
 
-        if self.lastMovedDirection == '':
-            if forward == True:
-                self.lastMovedDirection = 'forward'
-            else:
-                self.lastMovedDirection = 'backward'
+        forward = motorLeftSpeed >= 0 ? True : False
 
         self.activate_motor_left_pins(forward)
         self.activate_motor_right_pins(forward)
 
     def activate_motor_left_pins(self, forward):
-        if forward == True and self.lastMovedDirection == 'backward':
+        if forward == True:
             print '[ML] Setting PINs for direction: forward'
             GPIO.output(self.PIN_1_LEFT, True)
             GPIO.output(self.PIN_2_LEFT, False)
             GPIO.output(self.PIN_PWM_LEFT, True) 
-        elif forward == False and self.lastMovedDirection == 'forward':
+        elif forward == False:
             print '[ML] Setting PINs for direction: backward'            
             GPIO.output(self.PIN_1_LEFT, False)
             GPIO.output(self.PIN_2_LEFT, True)
             GPIO.output(self.PIN_PWM_LEFT, True)
 
     def activate_motor_right_pins(self, forward):
-        if forward == True and self.lastMovedDirection == 'backward':
+        if forward == True:
             print '[MR] Setting PINs for direction: forward'            
             GPIO.output(self.PIN_1_RIGHT, True)
             GPIO.output(self.PIN_2_RIGHT, False)
             GPIO.output(self.PIN_PWM_RIGHT, True) 
-        elif forward == False and self.lastMovedDirection == 'forward':
+        elif forward == False:
             print '[MR] Setting PINs for direction: backward'            
             GPIO.output(self.PIN_1_RIGHT, False)
             GPIO.output(self.PIN_2_RIGHT, True)

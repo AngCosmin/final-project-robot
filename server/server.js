@@ -27,7 +27,7 @@ wss.on('connection', function (ws) {
                 console.log('%s connected!', client);
                 break;
             case 'move':
-                sendMotorsSpeedToCar(object.speedSliderValue, object.steeringSliderValue);
+                calculateMotorsSpeed(object);
                 break;
             case 'clear_pins':
                 if (carClient) {
@@ -44,12 +44,14 @@ wss.on('connection', function (ws) {
     });
 });
 
-function sendMotorsSpeedToCar(speedSliderValue, steeringSliderValue)
+function sendMotorsSpeedToCar(joystick_x, joystick_y)
 {
+    var motorsSpeed = calculateMotorsSpeed(joystick_x, joystick_y);
+
     // If the car is connected
     if (carClient)
     {
-        var motorsSpeed = calculateMotorsSpeed(speedSliderValue, steeringSliderValue);
+        var motorsSpeed = calculateMotorsSpeed(joystick_x, joystick_y);
 
         // If the speed changed from previous command
         if (motorsSpeed.left != lastMotorsSpeed.left || motorsSpeed.right != lastMotorsSpeed.right) 
@@ -60,37 +62,99 @@ function sendMotorsSpeedToCar(speedSliderValue, steeringSliderValue)
     }
 }
 
-function calculateMotorsSpeed(speedSliderValue, steeringSliderValue)
+function calculateMotorsSpeed(object)
 {
-    var motorsSpeed = { left: 0, right: 0 };
+    // Get data from object
+    let max_value = object.joystick_max_value;
+    let x = object.joystick_x;
+    let y = object.joystick_y;
+    
+    // Calculate speed. Distance from (0, 0) to finger coords
+    let speed = Math.sqrt(x * x + y * y);
+    
+    // Set first motors speed
+    let motorsSpeed = { left: speed, right: speed };
 
-    // Turn left
-    if (steeringSliderValue < 0) {
-        if (speedSliderValue + steeringSliderValue < 20) {
-            motorsSpeed.left = 20;
-            motorsSpeed.right = 0;
-        }
+    if (y < 0) {
+        // DIRECTION FORWARD
+
+        if (x > 0) {
+            // RIGHT
+
+            motorsSpeed.right -= x;
+        } 
         else {
-            motorsSpeed.left = speedSliderValue;
-            motorsSpeed.right = speedSliderValue + steeringSliderValue;
+            // LEFT
+
+            motorsSpeed.left += x;
         }
     }
-    // Turn right
-    else if (steeringSliderValue > 0) {
-        if (speedSliderValue - steeringSliderValue < 20) {
-            motorsSpeed.left = 0;
-            motorsSpeed.right = 20;
-        }
-        else {
-            motorsSpeed.left = speedSliderValue - steeringSliderValue;
-            motorsSpeed.right = speedSliderValue;
-        }
-    }
-    // Go straightforward
     else {
-        motorsSpeed.left = speedSliderValue;
-        motorsSpeed.right = speedSliderValue;
+        // DIRECTION BACKWARD
+        motorsSpeed.left = -speed;
+        motorsSpeed.right = -speed;
+
+        if (x > 0) {
+            // RIGHT
+
+            motorsSpeed.right += x;
+        }
+        else {
+            // LEFT
+
+            motorsSpeed.left -= x;
+        }
     }
-        
-    return motorsSpeed;
+
+    if (motorsSpeed.left > 100) {
+        motorsSpeed.left = 100;
+    }
+    else if (motorsSpeed.left < -100) {
+        motorsSpeed.left = -100;
+    }
+
+    if (motorsSpeed.right > 100) {
+        motorsSpeed.right = 100;
+    }
+    else if (motorsSpeed.right < -100) {
+        motorsSpeed.right = -100;
+    }
+
+    if (Math.abs(motorsSpeed.left) < 7.5) {
+        motorsSpeed.left = 0;
+    }
+    
+    if (Math.abs(motorsSpeed.right) < 7.5) {
+        motorsSpeed.right = 0;
+    }
+
+    if (motorsSpeed.left > 0) {
+        if (motorsSpeed.left < 15) {
+            motorsSpeed.left = 15;
+        }
+    }
+    else {
+        if (motorsSpeed.left > 15) {
+            motorsSpeed.left = -15;
+        }
+    }
+
+    if (motorsSpeed.right > 0) {
+        if (motorsSpeed.right < 15) {
+            motorsSpeed.right = 15;
+        }
+    }
+    else {
+        if (motorsSpeed.right > 15) {
+            motorsSpeed.right = -15;
+        }
+    }
+
+    // To integer
+    motorsSpeed.left = parseInt(motorsSpeed.left);
+    motorsSpeed.right = parseInt(motorsSpeed.right);
+
+    console.log(motorsSpeed);
+    
+    // return motorsSpeed;
 }
