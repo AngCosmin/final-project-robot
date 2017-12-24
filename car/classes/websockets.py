@@ -40,6 +40,7 @@ class Websockets:
         print error
 
     def on_close(self, ws):
+        self.motors.cleanup_pins()
         print 'Connection is now closed!'
 
     def on_message(self, ws, message):

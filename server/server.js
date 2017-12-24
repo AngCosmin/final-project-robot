@@ -27,7 +27,7 @@ wss.on('connection', function (ws) {
                 console.log('%s connected!', client);
                 break;
             case 'move':
-                calculateMotorsSpeed(object);
+                sendMotorsSpeedToCar(object);
                 break;
             case 'clear_pins':
                 if (carClient) {
@@ -44,21 +44,14 @@ wss.on('connection', function (ws) {
     });
 });
 
-function sendMotorsSpeedToCar(joystick_x, joystick_y)
+function sendMotorsSpeedToCar(object)
 {
-    var motorsSpeed = calculateMotorsSpeed(joystick_x, joystick_y);
-
     // If the car is connected
     if (carClient)
     {
-        var motorsSpeed = calculateMotorsSpeed(joystick_x, joystick_y);
+        var motorsSpeed = calculateMotorsSpeed(object);
 
-        // If the speed changed from previous command
-        if (motorsSpeed.left != lastMotorsSpeed.left || motorsSpeed.right != lastMotorsSpeed.right) 
-        {
-            console.log('left ' + motorsSpeed.left + ' right ' + motorsSpeed.right);
-            carClient.send({ 'event': 'move', 'motorLeftSpeed': motorsSpeed.left, 'motorRightSpeed': motorsSpeed.right });
-        }
+        carClient.send(JSON.stringify({ 'event': 'move', 'motorLeftSpeed': motorsSpeed.left, 'motorRightSpeed': motorsSpeed.right }));
     }
 }
 
@@ -154,7 +147,5 @@ function calculateMotorsSpeed(object)
     motorsSpeed.left = parseInt(motorsSpeed.left);
     motorsSpeed.right = parseInt(motorsSpeed.right);
 
-    console.log(motorsSpeed);
-    
-    // return motorsSpeed;
+    return motorsSpeed;
 }
