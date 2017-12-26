@@ -26,7 +26,7 @@ wss.on('connection', function (socket)
                     robotClient = socket;
                 }
 
-                console.log('%s connected!', socket.applicatioName);
+                console.log('%s connected!', client);
                 break;
             case 'move':
                 sendMotorsSpeedToCar(object);
@@ -39,9 +39,7 @@ wss.on('connection', function (socket)
     });
 
     socket.on('close', function () {
-        console.log(clients[socket.id].name + ' disconnected');
-
-        delete clients[socket.id];
+        console.log('Someone disconnected');
     });
 });
 
