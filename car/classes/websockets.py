@@ -51,8 +51,9 @@ class Websockets:
             if event == 'move':
                 motorLeftSpeed = message['motorLeftSpeed']
                 motorRightSpeed = message['motorRightSpeed']
+                direction = message['direction']
 
-                self.motors.move_motors(motorLeftSpeed, motorRightSpeed);
+                self.motors.move_motors(motorLeftSpeed, motorRightSpeed, direction);
             elif event == 'turn_motors':
                 self.motors.toggleMotors(message['status'])
         except Exception as e:
