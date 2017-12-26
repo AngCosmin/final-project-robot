@@ -17,11 +17,20 @@ export default class App extends Component<{}> {
 		super(props);
 
 		this.state = {
-			motorsStatus: 'off',
+			motorsStatus: {
+				value: 'Turn on',
+				color: '#27AE60', // Red
+			},
+			speedLevel: 'slow',
 			joystick: { 
 				x: 0, 
 				y: 0,
 				maxValue: 100,
+			},
+			speedButtons: {
+				slow: '#E74C3C', // Red
+				medium: '#373D3F', // Black
+				fast: '#373D3F', // Black
 			},
 			pan: new Animated.ValueXY(),
 			scale: new Animated.Value(0.3),			
@@ -120,6 +129,7 @@ export default class App extends Component<{}> {
 		this.ws.send(JSON.stringify({ 
 			'event': 'move', 
 			'joystick_max_value': this.state.joystick.maxValue,
+			'speed_level': this.state.speedLevel,
 			'joystick_x': this.state.joystick.x, 
 			'joystick_y': this.state.joystick.y 
 		}));
@@ -127,21 +137,65 @@ export default class App extends Component<{}> {
 
 	toggleMotorsStatus = () =>
 	{
-		// Toggle
-		if (this.state.motorsStatus === 'off') {
-			this.state.motorsStatus = 'on';
+		if (this.state.motorsStatus.value === 'Turn off') {
+			this.setState({
+				motorsStatus: {
+					value: 'Turn on',
+					color: '#27AE60', // Green
+				}
+			});
 		}
 		else {
-			this.state.motorsStatus = 'off';
+			this.setState({
+				motorsStatus: {
+					value: 'Turn off',
+					color: '#E74C3C', // Red
+				}
+			});
 		}
-
-		// Set button text
-		this.setState({motorsStatus: this.state.motorsStatus});
 
 		this.ws.send(JSON.stringify({
 			'event': 'turn_motors',
-			'status': this.state.motorsStatus
+			'status': this.state.motorsStatus.value
 		}));
+	}
+
+	changeSpeedLevel = (value) =>
+	{
+		// Change buttons color based on value
+		switch (value) {
+			case 'slow':
+				this.setState({
+					speedButtons: {
+						slow: '#E74C3C', // Red
+						medium: '#373D3F', // Black
+						fast: '#373D3F', // Black
+					}
+				});
+				break;
+			case 'medium':
+				this.setState({
+					speedButtons: {
+						slow: '#373D3F', // Black
+						medium: '#E74C3C', // Red
+						fast: '#373D3F', // Black
+					}
+				});
+				break;
+			case 'fast':
+				this.setState({
+					speedButtons: {
+						slow: '#373D3F', // Black
+						medium: '#373D3F', // Black
+						fast: '#E74C3C', // Red
+					}
+				});
+				break;
+			default:
+				break;
+		}
+
+		this.setState({ 'speedLevel': value });
 	}
 
 	render() 
@@ -151,17 +205,17 @@ export default class App extends Component<{}> {
 		let imageStyle = { transform: [{ translateX }, { translateY }, { scale }] };
 
 		return (
-			<View style={styles.container}>			
-				<View style={styles.topContainer}>
-					<View style={styles.section}>			
+			<View style={ styles.container }>			
+				<View style={ styles.topContainer }>
+					<View style={ styles.section }>			
 						<Text>Speed level</Text>
-						<Button onPress={null} title="Slow" color="#373D3F"></Button>
-						<Button onPress={null} title="Medium" color="#373D3F"></Button>
-						<Button onPress={null} title="Fast" color="#373D3F"></Button>
+						<Button onPress={ () => { this.changeSpeedLevel('slow') } } title="Slow" color={ this.state.speedButtons.slow }></Button>
+						<Button onPress={ () => { this.changeSpeedLevel('medium') } } title="Medium" color={ this.state.speedButtons.medium }></Button>
+						<Button onPress={ () => { this.changeSpeedLevel('fast') } } title="Fast" color={ this.state.speedButtons.fast }></Button>
 					</View>
 					<View style={styles.section}>			
 						<Text>Motors</Text>
-						<Button onPress={this.toggleMotorsStatus} title={this.state.motorsStatus} color="#373D3F"></Button>
+						<Button onPress={this.toggleMotorsStatus} title={this.state.motorsStatus.value} color={ this.state.motorsStatus.color }></Button>
 					</View>
 				</View>
 				<View style={styles.bottomContainer}>				
