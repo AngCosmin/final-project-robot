@@ -7,8 +7,6 @@ class Motors:
         # Get motors pins from config file
         config = ConfigParser.RawConfigParser()
 
-        self.lastMovedDirection = ''
-
         try:
             config.read('./config.cfg')
 
