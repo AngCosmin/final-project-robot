@@ -11,6 +11,7 @@ import {
 	Animated,
 	PanResponder,
 } from 'react-native';
+import Orientation from 'react-native-orientation';
 
 export default class App extends Component<{}> {
 	constructor(props) {
@@ -18,19 +19,19 @@ export default class App extends Component<{}> {
 
 		this.state = {
 			motorsStatus: {
-				value: 'Turn on',
+				value: 'Motors on',
 				color: '#27AE60', // Red
 			},
-			speedLevel: 'slow',
+			speedLevel: 'fast',
 			joystick: { 
 				x: 0, 
 				y: 0,
 				maxValue: 100,
 			},
 			speedButtons: {
-				slow: '#E74C3C', // Red
+				slow: '#373D3F', // Red
 				medium: '#373D3F', // Black
-				fast: '#373D3F', // Black
+				fast: '#E74C3C', // Black
 			},
 			pan: new Animated.ValueXY(),
 			scale: new Animated.Value(0.3),			
@@ -124,6 +125,10 @@ export default class App extends Component<{}> {
 		});
 	}
 	
+	componentDidMount() {
+		Orientation.lockToLandscape();
+	}
+
 	sendMoveEvent()
 	{
 		this.ws.send(JSON.stringify({ 
@@ -137,27 +142,32 @@ export default class App extends Component<{}> {
 
 	toggleMotorsStatus = () =>
 	{
-		if (this.state.motorsStatus.value === 'Turn off') {
+		if (this.state.motorsStatus.value === 'Motors off') {
 			this.setState({
 				motorsStatus: {
-					value: 'Turn on',
+					value: 'Motors on',
 					color: '#27AE60', // Green
 				}
 			});
+
+			this.ws.send(JSON.stringify({
+				'event': 'turn_motors',
+				'status': 'off',
+			}));
 		}
 		else {
 			this.setState({
 				motorsStatus: {
-					value: 'Turn off',
+					value: 'Motors off',
 					color: '#E74C3C', // Red
 				}
 			});
-		}
 
-		this.ws.send(JSON.stringify({
-			'event': 'turn_motors',
-			'status': this.state.motorsStatus.value
-		}));
+			this.ws.send(JSON.stringify({
+				'event': 'turn_motors',
+				'status': 'on',
+			}));
+		}
 	}
 
 	changeSpeedLevel = (value) =>
@@ -207,16 +217,10 @@ export default class App extends Component<{}> {
 		return (
 			<View style={ styles.container }>			
 				<View style={ styles.topContainer }>
-					<View style={ styles.section }>			
-						<Text>Speed level</Text>
-						<Button onPress={ () => { this.changeSpeedLevel('slow') } } title="Slow" color={ this.state.speedButtons.slow }></Button>
-						<Button onPress={ () => { this.changeSpeedLevel('medium') } } title="Medium" color={ this.state.speedButtons.medium }></Button>
-						<Button onPress={ () => { this.changeSpeedLevel('fast') } } title="Fast" color={ this.state.speedButtons.fast }></Button>
-					</View>
-					<View style={styles.section}>			
-						<Text>Motors</Text>
-						<Button onPress={this.toggleMotorsStatus} title={this.state.motorsStatus.value} color={ this.state.motorsStatus.color }></Button>
-					</View>
+					<Button onPress={ () => { this.changeSpeedLevel('slow') } } title="Slow" color={ this.state.speedButtons.slow }></Button>
+					<Button onPress={ () => { this.changeSpeedLevel('medium') } } title="Medium" color={ this.state.speedButtons.medium }></Button>
+					<Button onPress={ () => { this.changeSpeedLevel('fast') } } title="Fast" color={ this.state.speedButtons.fast }></Button>
+					<Button onPress={this.toggleMotorsStatus} title={this.state.motorsStatus.value} color={ this.state.motorsStatus.color }></Button>
 				</View>
 				<View style={styles.bottomContainer}>				
 					<View style={styles.joystickContainer}>
@@ -243,8 +247,8 @@ const styles = StyleSheet.create({
 	topContainer: {
 		flex: 0.1,
 		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'center',		
+		alignItems: 'center',	
+		justifyContent: 'space-around'
 	},
 	bottomContainer: {
 		flex: 0.9,
@@ -256,10 +260,6 @@ const styles = StyleSheet.create({
 	},
 	cameraContainer: {
 		flex: 0.55,
-	},
-	section: {
-		flexDirection: 'row',
-		alignItems: 'center',
 	},
 	circle: {
 		alignItems: 'center',
