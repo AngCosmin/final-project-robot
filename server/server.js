@@ -139,18 +139,20 @@ function _scaleMotorsSpeed(speed_level, motorsSpeed, max_value)
 
 function _setMotorsDirection(joystick_x, joystick_y, motorsSpeed)
 {
+    let speed = Math.sqrt(joystick_x * joystick_x + joystick_y * joystick_y);
+
     if (joystick_y < 0) {
         // DIRECTION FORWARD
 
         if (joystick_x > 0) {
             // RIGHT
 
-            motorsSpeed.right -= x;
+            motorsSpeed.right -= joystick_x;
         } 
         else {
             // LEFT
 
-            motorsSpeed.left += x;
+            motorsSpeed.left += joystick_x;
         }
     }
     else {
@@ -162,12 +164,12 @@ function _setMotorsDirection(joystick_x, joystick_y, motorsSpeed)
         if (joystick_x > 0) {
             // RIGHT
 
-            motorsSpeed.right += x;
+            motorsSpeed.right += joystick_x;
         }
         else {
             // LEFT
 
-            motorsSpeed.left -= x;
+            motorsSpeed.left -= joystick_x;
         }
     }
 
@@ -224,4 +226,6 @@ function _recalculateSpeed(motorsSpeed)
             motorsSpeed.right = -20;
         }
     }
+
+    return motorsSpeed;
 }
