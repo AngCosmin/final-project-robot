@@ -11,56 +11,29 @@ import {
 	Animated,
 	PanResponder,
 } from 'react-native';
-import Orientation from 'react-native-orientation';
 
-export default class App extends Component<{}> {
+export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			motorsStatus: {
-				value: 'Motors on',
-				color: '#27AE60', // Red
+			motors: {
+				theyAreOn: false,
+				buttonText: 'TURN MOTORS ON',
+				buttonColor: '#27AE60', // Green
 			},
-			speedLevel: 'fast',
 			joystick: { 
 				x: 0, 
 				y: 0,
 				maxValue: 100,
 			},
-			speedButtons: {
-				slow: '#373D3F', // Red
-				medium: '#373D3F', // Black
-				fast: '#E74C3C', // Black
+			connection: {
+				isConnected: false,
+				text: 'Waiting for connection...',
+				color: 'rgba(60, 60, 60, 0.5)', // Gray
 			},
 			pan: new Animated.ValueXY(),
 			scale: new Animated.Value(0.3),			
-		}
-	}
-
-	componentWillMount() {
-		try {
-			this.ws = new WebSocket('ws://192.168.0.87:3000');
-
-			this.ws.onopen = () => {
-				this.ws.send(JSON.stringify({ 'event': 'connection', 'client': 'React Native' }));
-			};
-
-			this.ws.onmessage = (e) => {
-				console.log('SERVER' + e.data);
-			};
-
-			this.ws.onerror = (e) => {
-				console.log(e);
-			};
-
-			this.ws.onclose = (e) => {
-				this.ws.send('close');
-				console.log(e.code, e.reason);
-			};
-		}
-		catch(e) {
-			console.warn(e);
 		}
 
 		this._panResponder = PanResponder.create({
@@ -124,88 +97,111 @@ export default class App extends Component<{}> {
 			}
 		});
 	}
-	
-	componentDidMount() {
-		Orientation.lockToLandscape();
+
+	connectToServer = () => {
+		this.ws = new WebSocket('ws://172.19.8.151:3000');
+
+		this.ws.onopen = () => {
+			this.ws.send(JSON.stringify({ 'event': 'connection', 'client': 'Mobile application' }));
+			this.setState({ 
+				connection: {
+					isConnected: true,
+					text: 'Connected',
+					color: 'rgba(39, 174, 96, 0.5)',
+				}
+			});
+		};
+
+		this.ws.onmessage = (e) => {
+			console.warn('SERVER' + e.data);
+		};
+
+		this.ws.onerror = (e) => {
+			this.setState({ 
+				connection: {
+					isConnected: false,
+					text: 'Connection error',
+					color: 'rgba(231, 76, 60, 0.5)',
+				}
+			});
+		};
+
+		this.ws.onclose = (e) => {
+			this.ws.send('close');
+
+			// If the connection dropped
+			// Try to reconnect
+			this.setState({ 
+				connection: {
+					isConnected: false,
+					text: 'Trying to connect...',
+					color: 'rgba(231, 76, 60, 0.5)',
+				}
+			});
+			setTimeout(() => {
+				this.connectToServer();
+			}, 1000);
+		};
 	}
 
-	sendMoveEvent()
+	componentWillMount() {
+		try {
+			// Try to connect to NodeJS server
+			this.connectToServer();
+		}
+		catch(e) {
+			console.warn(e);
+		}
+	}
+
+	sendMoveEvent = () =>
 	{
-		this.ws.send(JSON.stringify({ 
-			'event': 'move', 
-			'joystick_max_value': this.state.joystick.maxValue,
-			'speed_level': this.state.speedLevel,
-			'joystick_x': this.state.joystick.x, 
-			'joystick_y': this.state.joystick.y 
-		}));
+		if (this.state.connection.isConnected) {
+			this.ws.send(JSON.stringify({ 
+				'event': 'move', 
+				'joystick_max_value': this.state.joystick.maxValue,
+				'joystick_x': this.state.joystick.x, 
+				'joystick_y': this.state.joystick.y 
+			}));
+		}
 	}
 
 	toggleMotorsStatus = () =>
 	{
-		if (this.state.motorsStatus.value === 'Motors off') {
-			this.setState({
-				motorsStatus: {
-					value: 'Motors on',
-					color: '#27AE60', // Green
-				}
-			});
+		if (this.state.connection.isConnected) {
+			if (this.state.motors.theyAreOn === false) {
+				// Turn motors on
 
-			this.ws.send(JSON.stringify({
-				'event': 'turn_motors',
-				'status': 'off',
-			}));
-		}
-		else {
-			this.setState({
-				motorsStatus: {
-					value: 'Motors off',
-					color: '#E74C3C', // Red
-				}
-			});
-
-			this.ws.send(JSON.stringify({
-				'event': 'turn_motors',
-				'status': 'on',
-			}));
-		}
-	}
-
-	changeSpeedLevel = (value) =>
-	{
-		// Change buttons color based on value
-		switch (value) {
-			case 'slow':
 				this.setState({
-					speedButtons: {
-						slow: '#E74C3C', // Red
-						medium: '#373D3F', // Black
-						fast: '#373D3F', // Black
+					motors: {
+						theyAreOn: true,
+						buttonText: 'TURN MOTORS OFF',
+						buttonColor: '#E74C3C', // Red						
 					}
 				});
-				break;
-			case 'medium':
-				this.setState({
-					speedButtons: {
-						slow: '#373D3F', // Black
-						medium: '#E74C3C', // Red
-						fast: '#373D3F', // Black
-					}
-				});
-				break;
-			case 'fast':
-				this.setState({
-					speedButtons: {
-						slow: '#373D3F', // Black
-						medium: '#373D3F', // Black
-						fast: '#E74C3C', // Red
-					}
-				});
-				break;
-			default:
-				break;
-		}
+	
+				this.ws.send(JSON.stringify({
+					'event': 'turn_motors',
+					'status': 'on',
+				}));
+			}
+			else {
+				// Turn motors off
 
-		this.setState({ 'speedLevel': value });
+				this.setState({
+					motors: {
+						theyAreOn: false,
+						buttonText: 'TURN MOTORS ON',
+						buttonColor: '#27AE60', // Green						
+					}
+				});
+	
+				this.ws.send(JSON.stringify({
+					'event': 'turn_motors',
+					'status': 'off',
+				}));
+			}
+		}
 	}
 
 	render() 
@@ -217,10 +213,14 @@ export default class App extends Component<{}> {
 		return (
 			<View style={ styles.container }>			
 				<View style={ styles.topContainer }>
-					<Button onPress={ () => { this.changeSpeedLevel('slow') } } title="Slow" color={ this.state.speedButtons.slow }></Button>
-					<Button onPress={ () => { this.changeSpeedLevel('medium') } } title="Medium" color={ this.state.speedButtons.medium }></Button>
-					<Button onPress={ () => { this.changeSpeedLevel('fast') } } title="Fast" color={ this.state.speedButtons.fast }></Button>
-					<Button onPress={this.toggleMotorsStatus} title={this.state.motorsStatus.value} color={ this.state.motorsStatus.color }></Button>
+					<Text style = {{ color: this.state.connection.color }}>
+						{ this.state.connection.text }
+					</Text>
+					
+					<Button onPress = { this.toggleMotorsStatus } 
+							title = { this.state.motors.buttonText } 
+							color = { this.state.motors.buttonColor }>
+					</Button>
 				</View>
 				<View style={styles.bottomContainer}>				
 					<View style={styles.joystickContainer}>
@@ -245,17 +245,19 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 	},
 	topContainer: {
-		flex: 0.1,
+		paddingTop: 10,
+		flex: 0.15,
 		flexDirection: 'row',
 		alignItems: 'center',	
-		justifyContent: 'space-around'
+		justifyContent: 'space-around',
 	},
 	bottomContainer: {
-		flex: 0.9,
+		flex: 0.85,
 		flexDirection: 'row',
 	},
 	joystickContainer: {
 		flex: 0.45,
+		paddingLeft: 15,
 		justifyContent: 'center',
 	},
 	cameraContainer: {
@@ -263,12 +265,15 @@ const styles = StyleSheet.create({
 	},
 	circle: {
 		alignItems: 'center',
-		justifyContent: 'flex-end',		
 		borderRadius: 300,
 		borderWidth: 2,
 		width: 270,
 		height: 270,
 		borderColor:'rgba(0,0,0,0.1)',
 		backgroundColor: '#FFFFFF'
+	},
+	connectionText: {
+		paddingTop: 5,
+		color: 'rgba(60, 60, 60, 0.5)',
 	},
 });
