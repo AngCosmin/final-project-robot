@@ -99,7 +99,7 @@ export default class App extends React.Component {
 	}
 
 	connectToServer = () => {
-		this.ws = new WebSocket('ws://172.19.8.151:3000');
+		this.ws = new WebSocket('ws://192.168.100.10:3000');
 
 		this.ws.onopen = () => {
 			this.ws.send(JSON.stringify({ 'event': 'connection', 'client': 'Mobile application' }));
@@ -113,10 +113,20 @@ export default class App extends React.Component {
 		};
 
 		this.ws.onmessage = (e) => {
-			console.warn('SERVER' + e.data);
+			let object = JSON.parse(e.data);
+				
+			if (object.event == 'ping') {
+				this.ws.send(JSON.stringify({
+					'event': 'pong',
+					'timestamp': Date.now()
+				}));
+			}
+			// console.warn('SERVER' + e.data);
 		};
 
 		this.ws.onerror = (e) => {
+			this.ws.send('close');
+			
 			this.setState({ 
 				connection: {
 					isConnected: false,
@@ -138,6 +148,7 @@ export default class App extends React.Component {
 					color: 'rgba(231, 76, 60, 0.5)',
 				}
 			});
+
 			setTimeout(() => {
 				this.connectToServer();
 			}, 1000);

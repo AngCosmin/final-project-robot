@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ServerStatus</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Quicksand');
+
+        .title {
+            font-weight: bold;
+            font-size: 2em;
+            color: #595959;
+            margin-bottom: 20px;
+        }
+
+        .wrapper {
+            text-align: center;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .success-status-message {
+            color: #27AE60;
+        }
+
+        .danger-status-message {
+            color: #E74C3C;
+        }
+
+        .server-ip {
+            color: #3c3c3c;
+        } 
+    </style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="title">
+			SERVER STATUS
+		</div>
+
+		<div class="server-ip">
+			Server IP: 192.168.0.123
+		</div>
+		
+		<div class="status">
+			Robot
+			<span class="success-status-message">Connected</span>
+		</div>
+		<div class="status">
+			Mobile app
+			<span class="danger-status-message">Not connected</span>
+		</div>
+	</div>
+</body>
+</html>

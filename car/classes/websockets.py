@@ -34,7 +34,7 @@ class Websockets:
 
     def on_open(self, ws):
         print 'Connection is now open!'
-        ws.send(json.dumps({'event': 'connection', 'client': 'Car'}));
+        ws.send(json.dumps({'event': 'connection', 'client': 'Robot'}));
 
     def on_error(self, ws, error):
         print error
@@ -56,6 +56,8 @@ class Websockets:
                 self.motors.move_motors(motorLeftSpeed, motorRightSpeed, direction);
             elif event == 'turn_motors':
                 self.motors.toggleMotors(message['status'])
+            # elif event == 'ping':
+                #
         except Exception as e:
             print e
 

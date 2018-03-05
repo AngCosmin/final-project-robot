@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Server status</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Quicksand');
+
+        .title {
+            font-weight: bold;
+            font-size: 2em;
+            color: #595959;
+            margin-bottom: 20px;
+        }
+
+        .wrapper {
+            text-align: center;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .success-status-message {
+            color: #27AE60;
+        }
+
+        .danger-status-message {
+            color: #E74C3C;
+        }
+
+        .server-ip {
+            color: #3c3c3c;
+        } 
+    </style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="title">
+			SERVER STATUS
+		</div>
+
+		<div class="server-ip">
+			Server IP: <span id="server-ip">-</span>
+		</div>
+		
+		<div class="status">
+			Robot
+			<span id="robot-status" class="danger-status-message">Not connected</span>
+		</div>
+		<div class="status">
+			Mobile app
+			<span id="mobile-app-status" class="danger-status-message">Not connected</span>
+		</div>
+	</div>
+
+    <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+        
+        let serverIp = document.querySelector('#server-ip');
+        let robotStatus = document.querySelector('#robot-status');
+        let mobileAppStatus = document.querySelector('#mobile-app-status');
+
+        ipcRenderer.on('mobile-app:status', function (e, status) {
+            mobileAppStatus.innerHTML = status;
+
+            if (status === 'Connected') {
+                mobileAppStatus.className = 'success-status-message';
+            }
+            else {
+                mobileAppStatus.className = 'danger-status-message';                
+            }
+        });
+
+        ipcRenderer.on('server-ip', function(e, ip) {
+            serverIp.innerHTML = ip;
+        });
+    </script>
+</body>
+</html>
