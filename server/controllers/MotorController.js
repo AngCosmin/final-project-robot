@@ -48,10 +48,13 @@ class MotorController {
         this.right.speed = this.right.speed < -100 ? -100 : this.right.speed;
 
         // Adjust motors speed (min speed = 15)
-        this.left.speed = this.left.speed > -15 && this.left.speed < 0 ? -15 : this.left.speed;
-        this.left.speed = this.left.speed > 0 && this.left.speed < 15 ? 15 : this.left.speed;
-        this.right.speed = this.right.speed > -15 && this.right.speed < 0 ? -15 : this.right.speed;
-        this.right.speed = this.right.speed > 0 && this.right.speed < 15 ? 15 : this.right.speed;
+        this.left.speed = this.left.speed > -15 && this.left.speed < -5 ? -15 : this.left.speed;
+        this.left.speed = this.left.speed > -5 && this.left.speed < 5 ? 0 : this.left.speed;
+        this.left.speed = this.left.speed > 5 && this.left.speed < 15 ? 15 : this.left.speed;
+
+        this.right.speed = this.right.speed > -15 && this.right.speed < -5 ? -15 : this.right.speed;
+        this.right.speed = this.right.speed > -5 && this.right.speed < 5 ? 0 : this.right.speed;
+        this.right.speed = this.right.speed > 5 && this.right.speed < 15 ? 15 : this.right.speed;
 
         // Parse integer
         this.left.speed = parseInt(this.left.speed);
