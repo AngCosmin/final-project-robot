@@ -40,7 +40,6 @@ class MotorsController:
         self.right.stop()
 
     def move_motors(self, left_speed, right_speed):
-        # print 'Motor left speed ' + str(left_speed) + ' Motor right speed ' + str(right_speed)  
         self.left.move(left_speed)
         self.right.move(right_speed)   
 

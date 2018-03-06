@@ -48,13 +48,13 @@ class MotorController {
         this.right.speed = this.right.speed < -100 ? -100 : this.right.speed;
 
         // Adjust motors speed (min speed = 15)
-        this.left.speed = this.left.speed > -15 && this.left.speed < -5 ? -15 : this.left.speed;
-        this.left.speed = this.left.speed > -5 && this.left.speed < 5 ? 0 : this.left.speed;
+        this.left.speed = this.left.speed > -15 && this.left.speed <= -5 ? -15 : this.left.speed;
         this.left.speed = this.left.speed > 5 && this.left.speed < 15 ? 15 : this.left.speed;
+        this.left.speed = this.left.speed > -5 && this.left.speed <= 5 ? 0 : this.left.speed;
 
-        this.right.speed = this.right.speed > -15 && this.right.speed < -5 ? -15 : this.right.speed;
-        this.right.speed = this.right.speed > -5 && this.right.speed < 5 ? 0 : this.right.speed;
+        this.right.speed = this.right.speed > -15 && this.right.speed <= -5 ? -15 : this.right.speed;
         this.right.speed = this.right.speed > 5 && this.right.speed < 15 ? 15 : this.right.speed;
+        this.right.speed = this.right.speed > -5 && this.right.speed <= 5 ? 0 : this.right.speed;
 
         // Parse integer
         this.left.speed = parseInt(this.left.speed);
@@ -63,11 +63,16 @@ class MotorController {
 
     sendSpeed() {
         if (this.robot != null && this.robot.readyState == WebSocket.OPEN) {
-            this.robot.send(JSON.stringify({
-                'event': 'move',
-                'motorLeftSpeed': this.left.speed,
-                'motorRightSpeed': this.right.speed,
-            }));
+            if (Math.abs(this.left.speed - this.left.lastSpeed) > 2 || Math.abs(this.right.speed - this.right.lastSpeed) > 2) {
+                this.robot.send(JSON.stringify({
+                    'event': 'move',
+                    'motorLeftSpeed': this.left.speed,
+                    'motorRightSpeed': this.right.speed,
+                }));
+
+                this.left.lastSpeed = this.left.speed;
+                this.right.lastSpeed = this.right.speed;
+            }
         }
         else {
             console.log('Robot not connected to the server!');
