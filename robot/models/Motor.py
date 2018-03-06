@@ -21,8 +21,7 @@ class Motor:
             self.stop()
         else:
             self.pwm.ChangeDutyCycle(abs(speed))
-            print 'Motor: ' + str(speed)
-
+            
             if speed < 0:
                 self.activate('backward')
             else:
