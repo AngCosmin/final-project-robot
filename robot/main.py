@@ -22,29 +22,24 @@ if __name__ == "__main__":
         print 'Connecting to ' + server_ip + ':' + server_port + '...'
 
         websocket.enableTrace(True)
-        ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
-
-        ws.on_open = on_open
-        ws.on_message = on_message
-        ws.on_error = on_error
-        ws.on_close = on_close
+        ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port, on_open = on_open, on_message = on_message, on_error = on_error, on_close = on_close)
 
         ws.run_forever()
     except Exception as e:
         print e
 
-def on_open(self, ws):
+def on_open(ws):
     print 'Connection is now open!'
     ws.send(json.dumps({'event': 'connection', 'client': 'Robot'}));
 
-def on_error(self, ws, error):
+def on_error(ws, error):
     print error
 
-def on_close(self, ws):
+def on_close(ws):
     motors.clean();
     print 'Connection is now closed!'
 
-def on_message(self, ws, message):
+def on_message(ws, message):
     try:
         message = json.loads(message)
         event = message['event']
