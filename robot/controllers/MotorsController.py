@@ -102,6 +102,8 @@ class MotorsController:
 
     def clean(self):
         print '[PINS] Cleaning up motors pins...'
-        self.left.clean()
-        self.right.clean()
+        if self.left != None:
+            self.left.clean()
+        if self.right != None:
+            self.right.clean()
         sleep(0.5)
