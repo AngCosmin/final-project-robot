@@ -65,13 +65,19 @@ export default class App extends React.Component {
 
 				// Verify if x coord modified with at least 2
 				if (Math.abs(this.state.joystick.x - x) >= 2) {
+					x = x > 100 ? 100 : x;
+					x = x < -100 ? -100 : x;
 					this.state.joystick.x = x;
+
 					hasModified = true;
 				}
 
 				// Verify if y coord modified with at least 2				
 				if (Math.abs(this.state.joystick.y - y) >= 2) {
+					y = y > 100 ? 100 : y;
+					y = y < -100 ? -100 : y;					
 					this.state.joystick.y = y;
+
 					hasModified = true;
 				}
 
@@ -98,8 +104,18 @@ export default class App extends React.Component {
 		});
 	}
 
+	componentWillMount() {
+		try {
+			// Try to connect to NodeJS server
+			this.connectToServer();
+		}
+		catch(e) {
+			console.warn(e);
+		}
+	}
+
 	connectToServer = () => {
-		this.ws = new WebSocket('ws://192.168.100.10:3000');
+		this.ws = new WebSocket('ws://192.168.0.157:3000');
 
 		this.ws.onopen = () => {
 			this.ws.send(JSON.stringify({ 'event': 'connection', 'client': 'Mobile application' }));
@@ -155,22 +171,12 @@ export default class App extends React.Component {
 		};
 	}
 
-	componentWillMount() {
-		try {
-			// Try to connect to NodeJS server
-			this.connectToServer();
-		}
-		catch(e) {
-			console.warn(e);
-		}
-	}
 
 	sendMoveEvent = () =>
 	{
 		if (this.state.connection.isConnected) {
 			this.ws.send(JSON.stringify({ 
 				'event': 'move', 
-				'joystick_max_value': this.state.joystick.maxValue,
 				'joystick_x': this.state.joystick.x, 
 				'joystick_y': this.state.joystick.y 
 			}));

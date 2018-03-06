@@ -1,3 +1,5 @@
+const WebSocket = require('ws');
+
 class MobileApp {
     constructor(socket) {
         this.socket = socket;
@@ -17,7 +19,7 @@ class MobileApp {
             this.socket = null;
             return false;
         }
-        else if (this.socket != null) {
+        else if (this.socket != null && this.socket.readyState == WebSocket.OPEN) {
             // Mobile app is still connected
 
             this.socket.send(JSON.stringify({'event': 'ping', 'timestamp': Date.now()}));
