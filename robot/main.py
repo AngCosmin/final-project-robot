@@ -7,32 +7,6 @@ from controllers.RelayController import RelayController
 
 ws = None
 
-if __name__ == "__main__":
-    config = ConfigParser.RawConfigParser()
-
-    motors = MotorsController()
-    relay = RelayController()
-
-    try:
-        config.read('./config.cfg')
-
-        server_ip = config.get('Websocket', 'server_ip')
-        server_port = config.get('Websocket', 'server_port')
-
-        print 'Connecting to ' + server_ip + ':' + server_port + '...'
-
-        websocket.enableTrace(True)
-        ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
-        ws.on_open = on_open
-        ws.on_message = on_message 
-        ws.on_error = on_error 
-        ws.on_close = on_close
-        ws.run_forever()
-    except Exception as e:
-        motors.clean()
-        relay.clean()
-        print e
-
 def on_open(ws):
     print 'Connection is now open!'
     ws.send(json.dumps({'event': 'connection', 'client': 'Robot'}));
@@ -60,4 +34,30 @@ def on_message(ws, message):
             else:
                 relay.stop()
     except Exception as e:
+        print e
+
+if __name__ == "__main__":
+    config = ConfigParser.RawConfigParser()
+
+    motors = MotorsController()
+    relay = RelayController()
+
+    try:
+        config.read('./config.cfg')
+
+        server_ip = config.get('Websocket', 'server_ip')
+        server_port = config.get('Websocket', 'server_port')
+
+        print 'Connecting to ' + server_ip + ':' + server_port + '...'
+
+        websocket.enableTrace(True)
+        ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
+        ws.on_open = on_open
+        ws.on_message = on_message 
+        ws.on_error = on_error 
+        ws.on_close = on_close
+        ws.run_forever()
+    except Exception as e:
+        motors.clean()
+        relay.clean()
         print e
