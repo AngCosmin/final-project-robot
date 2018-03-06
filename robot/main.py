@@ -26,7 +26,7 @@ def on_message(ws, message):
         if event == 'move':
             motorLeftSpeed = message['motorLeftSpeed']
             motorRightSpeed = message['motorRightSpeed']
-            
+            print str(motorLeftSpeed) + " " + str(motorRightSpeed)
             motors.move_motors(motorLeftSpeed, motorRightSpeed)
         elif event == 'turn_motors':
             if message['status'] == 'on':
