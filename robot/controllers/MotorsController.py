@@ -23,7 +23,7 @@ class MotorsController:
             PIN_PWM_RIGHT = config.getint('MotorRight', 'pin_pwm')
 
             # Get width of the image for function go_to_object
-            self.image_width = config.getint('Image', 'width')            
+            # self.image_width = config.getint('Image', 'width')            
             
             self.left = Motor(PIN_1_LEFT, PIN_2_LEFT, PIN_PWM_LEFT)
             self.right = Motor(PIN_1_RIGHT, PIN_2_RIGHT, PIN_PWM_RIGHT)  
@@ -102,8 +102,6 @@ class MotorsController:
 
     def clean(self):
         print '[PINS] Cleaning up motors pins...'
-        if self.left != None:
-            self.left.clean()
-        if self.right != None:
-            self.right.clean()
+        self.left.clean()
+        self.right.clean()
         sleep(0.5)
