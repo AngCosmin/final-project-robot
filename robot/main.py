@@ -50,6 +50,9 @@ if __name__ == "__main__":
 
         print 'Connecting to ' + server_ip + ':' + server_port + '...'
 
+        while 1:
+            motors.move_motors(-30, 30)
+
         websocket.enableTrace(True)
         ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
         ws.on_open = on_open
@@ -57,9 +60,6 @@ if __name__ == "__main__":
         ws.on_error = on_error 
         ws.on_close = on_close
         ws.run_forever()
-
-        while 1:
-            motors.move_motors(30, 100)
     except Exception as e:
         motors.clean()
         relay.clean()
