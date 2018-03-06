@@ -29,21 +29,27 @@ def forward(tf):
 
 	time.sleep(tf)
 
-	# pwm.ChangeDutyCycle(30);
-	# GPIO.output(11, False)
-	# GPIO.output(13, True)
-	# GPIO.output(7, True)
-	# time.sleep(tf)
-	GPIO.cleanup();
+	GPIO.output(36, False)
+	GPIO.output(38, False)
+	GPIO.output(40, False)
 
-def reverse(tf):
-	init()
-	GPIO.output(11, True)
-	GPIO.output(13, False)
+	GPIO.output(16, False)
+	GPIO.output(18, False)
+	GPIO.output(12, False)
+
+	pwm_motor_1.ChangeDutyCycle(50);
+	pwm_motor_2.ChangeDutyCycle(50);
+
+	GPIO.output(36, False)
+	GPIO.output(38, True)
+	GPIO.output(40, True)
+
+	GPIO.output(16, False)
+	GPIO.output(18, True)
+	GPIO.output(12, True)
+	
 	time.sleep(tf)
-	GPIO.cleanup()
+	GPIO.cleanup();
 
 print 'forward'
 forward(1)
-# print 'backward'
-# reverse(3)
