@@ -52,4 +52,4 @@ def forward(tf):
 	GPIO.cleanup();
 
 print 'forward'
-forward(1)
+forward(2)
