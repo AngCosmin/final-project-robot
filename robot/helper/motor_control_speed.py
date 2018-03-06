@@ -37,7 +37,7 @@ def forward(tf):
 	GPIO.output(18, False)
 	GPIO.output(12, False)
 
-	pwm_motor_1.ChangeDutyCycle(50);
+	pwm_motor_1.ChangeDutyCycle(15);
 	pwm_motor_2.ChangeDutyCycle(50);
 
 	GPIO.output(36, False)
