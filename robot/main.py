@@ -57,6 +57,9 @@ if __name__ == "__main__":
         ws.on_error = on_error 
         ws.on_close = on_close
         ws.run_forever()
+
+        while 1:
+            motors.move_motors(30, 100)
     except Exception as e:
         motors.clean()
         relay.clean()
