@@ -51,7 +51,7 @@ if __name__ == "__main__":
         print 'Connecting to ' + server_ip + ':' + server_port + '...'
 
         while 1:
-            motors.move_motors(-30, 30)
+            motors.move_motors(-10, 10)
 
         websocket.enableTrace(True)
         ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
