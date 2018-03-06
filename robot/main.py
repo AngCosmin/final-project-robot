@@ -22,8 +22,11 @@ if __name__ == "__main__":
         print 'Connecting to ' + server_ip + ':' + server_port + '...'
 
         websocket.enableTrace(True)
-        ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port, on_message = on_message, on_error = on_error, on_close = on_close)
+        ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
         ws.on_open = on_open
+        ws.on_message = on_message 
+        ws.on_error = on_error 
+        ws.on_close = on_close
         ws.run_forever()
     except Exception as e:
         motors.clean()
