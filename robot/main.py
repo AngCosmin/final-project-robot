@@ -12,6 +12,10 @@ from controllers.UltrasonicController import UltrasonicController
 ws = None
 ultrasonicDistance = 0
 
+motors = MotorsController()
+relay = RelayController()
+ultrasonic = UltrasonicController()
+
 def thread_calculate_ultrasonic_distance(thread_name):
     global ultrasonicDistance
 
@@ -50,10 +54,6 @@ def on_message(ws, message):
 
 if __name__ == "__main__":
     config = ConfigParser.RawConfigParser()
-
-    motors = MotorsController()
-    relay = RelayController()
-    ultrasonic = UltrasonicController()
 
     try:
         config.read('./config.cfg')
