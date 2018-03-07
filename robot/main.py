@@ -46,7 +46,7 @@ def on_message(ws, message):
             if ultrasonic_distance != None:
                 if ultrasonic_distance > 0:
                     motors.move_motors(motorLeftSpeed, motorRightSpeed)
-                else
+                else:
                     if motorLeftSpeed < 0 and motorRightSpeed < 0:
                         motors.move_motors(motorLeftSpeed, motorRightSpeed)
             else:
