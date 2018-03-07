@@ -20,7 +20,7 @@ class UltrasonicController:
 
         if distance < 1.5:
             return None
-        if distance < 6:
+        if distance < 7.5:
             distance = 0
         if distance > 25:
             distance = 25

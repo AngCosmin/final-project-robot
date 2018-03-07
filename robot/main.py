@@ -35,6 +35,7 @@ def on_error(ws, error):
 
 def on_close(ws):
     motors.clean();
+    relay.clean()
     print 'Connection is now closed!'
 
 def on_message(ws, message):
@@ -86,5 +87,4 @@ if __name__ == "__main__":
     except Exception as e:
         motors.clean()
         relay.clean()
-        sleep(1)
         print e
