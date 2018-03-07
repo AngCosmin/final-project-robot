@@ -2,11 +2,20 @@ import ConfigParser
 import websocket
 import thread
 import json
+from time import sleep
 from controllers.MotorsController import MotorsController
 from controllers.RelayController import RelayController
 from controllers.UltrasonicController import UltrasonicController
 
 ws = None
+ultrasonicDistance = 0
+
+def threadCalculateUltrasonicDistance():
+    global ultrasonicDistance
+
+    while True:
+        ultrasonicDistance = ultrasonic.measure()
+        sleep(0.2);
 
 def on_open(ws):
     print 'Connection is now open!'
@@ -28,13 +37,7 @@ def on_message(ws, message):
             motorLeftSpeed = message['motorLeftSpeed']
             motorRightSpeed = message['motorRightSpeed']
 
-            if motorLeftSpeed > 0 and motorRightSpeed > 0:
-                if ultrasonic.measure() > 10:
-                    motors.move_motors(motorLeftSpeed, motorRightSpeed)
-            else:
-                motors.move_motors(motorLeftSpeed, motorRightSpeed)
-                
-
+            print str(ultrasonicDistance) + " " + str(motorLeftSpeed) + " " + str(motorRightSpeed)
         elif event == 'turn_motors':
             if message['status'] == 'on':
                 relay.start()
