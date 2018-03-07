@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
         print 'Connecting to ' + server_ip + ':' + server_port + '...'
 
-        thread.start_new_thread(thread_calculate_ultrasonic_distance, ("Thread-1"))
+        thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Thread-1', ))
 
         websocket.enableTrace(True)
         ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
