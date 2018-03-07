@@ -21,7 +21,7 @@ def thread_calculate_ultrasonic_distance(thread_name):
 
     while True:
         ultrasonicDistance = ultrasonic.measure()
-        sleep(0.2);
+        sleep(0.5);
 
 def on_open(ws):
     print 'Connection is now open!'
