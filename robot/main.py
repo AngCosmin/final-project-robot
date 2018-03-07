@@ -4,6 +4,7 @@ import thread
 import json
 from controllers.MotorsController import MotorsController
 from controllers.RelayController import RelayController
+from controllers.UltrasonicController import UltrasonicController
 
 ws = None
 
@@ -26,8 +27,14 @@ def on_message(ws, message):
         if event == 'move':
             motorLeftSpeed = message['motorLeftSpeed']
             motorRightSpeed = message['motorRightSpeed']
-            print str(motorLeftSpeed) + " " + str(motorRightSpeed)
-            motors.move_motors(motorLeftSpeed, motorRightSpeed)
+
+            if motorLeftSpeed > 0 and motorRightSpeed > 0:
+                if ultrasonic.measure() > 10:
+                    motors.move_motors(motorLeftSpeed, motorRightSpeed)
+            else:
+                motors.move_motors(motorLeftSpeed, motorRightSpeed)
+                
+
         elif event == 'turn_motors':
             if message['status'] == 'on':
                 relay.start()
@@ -41,6 +48,7 @@ if __name__ == "__main__":
 
     motors = MotorsController()
     relay = RelayController()
+    ultrasonic = UltrasonicController()
 
     try:
         config.read('./config.cfg')
