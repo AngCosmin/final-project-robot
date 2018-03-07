@@ -18,9 +18,12 @@ ultrasonic = UltrasonicController()
 
 def thread_calculate_ultrasonic_distance(thread_name):
     global ultrasonic_distance
+    global motors
 
     while True:
         ultrasonic_distance = ultrasonic.measure()
+        if ultrasonic_distance == 0:
+            motors.stop();            
         sleep(0.5);
 
 def on_open(ws):
@@ -83,4 +86,5 @@ if __name__ == "__main__":
     except Exception as e:
         motors.clean()
         relay.clean()
+        sleep(1)
         print e
