@@ -24,7 +24,7 @@ def thread_calculate_ultrasonic_distance(thread_name):
         ultrasonic_distance = ultrasonic.measure()
         if ultrasonic_distance == 0:
             motors.stop();            
-        sleep(0.2);
+        sleep(0.05);
 
 def on_open(ws):
     print 'Connection is now open!'
