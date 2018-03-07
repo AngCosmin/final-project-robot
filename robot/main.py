@@ -10,17 +10,17 @@ from controllers.RelayController import RelayController
 from controllers.UltrasonicController import UltrasonicController
 
 ws = None
-ultrasonicDistance = 0
+ultrasonic_distance = 0
 
 motors = MotorsController()
 relay = RelayController()
 ultrasonic = UltrasonicController()
 
 def thread_calculate_ultrasonic_distance(thread_name):
-    global ultrasonicDistance
+    global ultrasonic_distance
 
     while True:
-        ultrasonicDistance = ultrasonic.measure()
+        ultrasonic_distance = ultrasonic.measure()
         sleep(0.5);
 
 def on_open(ws):
@@ -43,8 +43,14 @@ def on_message(ws, message):
             motorLeftSpeed = message['motorLeftSpeed']
             motorRightSpeed = message['motorRightSpeed']
 
-            motors.move_motors(motorLeftSpeed, motorRightSpeed)
-            print str(ultrasonicDistance) + " " + str(motorLeftSpeed) + " " + str(motorRightSpeed)
+            if ultrasonic_distance != None:
+                if ultrasonic_distance > 0:
+                    motors.move_motors(motorLeftSpeed, motorRightSpeed)
+                else
+                    if motorLeftSpeed < 0 and motorRightSpeed < 0:
+                        motors.move_motors(motorLeftSpeed, motorRightSpeed)
+            else:
+                motors.move_motors(motorLeftSpeed, motorRightSpeed)                                    
         elif event == 'turn_motors':
             if message['status'] == 'on':
                 relay.start()
