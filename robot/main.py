@@ -43,6 +43,7 @@ def on_message(ws, message):
             motorLeftSpeed = message['motorLeftSpeed']
             motorRightSpeed = message['motorRightSpeed']
 
+            motors.move_motors(motorLeftSpeed, motorRightSpeed)
             print str(ultrasonicDistance) + " " + str(motorLeftSpeed) + " " + str(motorRightSpeed)
         elif event == 'turn_motors':
             if message['status'] == 'on':
