@@ -2,19 +2,36 @@ import ConfigParser
 import websocket
 import thread
 import json
+import sys
+import cv2
+import RPi.GPIO as GPIO
+from imutils.video import VideoStream
 from time import sleep
+from time import time
 from threading import Thread
 from Queue import Queue
 from controllers.MotorsController import MotorsController
 from controllers.RelayController import RelayController
 from controllers.UltrasonicController import UltrasonicController
+from controllers.ServoController import ServoController
+from controllers.Camera import Camera
 
 ws = None
 ultrasonic_distance = 0
+robot_mode = 'manual'
 
 motors = MotorsController()
 relay = RelayController()
 ultrasonic = UltrasonicController()
+servo = ServoController()
+
+def clean():
+    motors.clean()
+    relay.clean()
+    servo.clean()
+    ultrasonic.clean()
+    camera.clean()
+    GPIO.cleanup()
 
 def thread_calculate_ultrasonic_distance(thread_name):
     global ultrasonic_distance
@@ -26,6 +43,47 @@ def thread_calculate_ultrasonic_distance(thread_name):
             motors.stop();            
         sleep(0.05);
 
+def thread_robot_autonomous(thread_name):
+    global robot_mode
+
+    try: 
+        while True:
+            if robot_mode == 'autonomous': 
+                frame, mask, object_x, object_y = camera.compute()
+                ultrasonic.measure()
+
+                if object_x != sys.maxint and object_y != sys.maxint:
+                    object_x = object_x - width / 2
+                    object_y = object_y - height / 2
+
+                    # Update the last active time
+                    lastActiveTime = time()
+
+                    # Activate motors
+                    # motors.go_to_object(object_x)
+
+                    # Activate servo
+                    servo.compute(object_y)
+
+                    motors.lastActiveTime = time()
+                    servo.lastActiveTime = time()
+                else:
+                    motors.stop()
+                    # motors.randomly_activate()
+                    # servo.randomly_activate()
+
+                # show the frame
+                cv2.imshow("Frame", frame)    
+                cv2.imshow("Mask", mask)
+                
+                key = cv2.waitKey(1) & 0xFF
+
+                if key == ord("q"):
+                    clean()
+                    break		
+    except KeyboardInterrupt:
+        clean()
+    
 def on_open(ws):
     print 'Connection is now open!'
     ws.send(json.dumps({'event': 'connection', 'client': 'Robot'}));
@@ -34,48 +92,80 @@ def on_error(ws, error):
     print error
 
 def on_close(ws):
-    motors.clean();
-    relay.clean()
+    clean()
     print 'Connection is now closed!'
 
 def on_message(ws, message):
+    global robot_mode
+
     try:
         message = json.loads(message)
         event = message['event']
         
         if event == 'move':
-            motorLeftSpeed = message['motorLeftSpeed']
-            motorRightSpeed = message['motorRightSpeed']
+            if robot_mode == 'manual':
+                motorLeftSpeed = message['motorLeftSpeed']
+                motorRightSpeed = message['motorRightSpeed']
 
-            if ultrasonic_distance != None:
-                if ultrasonic_distance > 0:
-                    motors.move_motors(motorLeftSpeed, motorRightSpeed)
-                else:
-                    motors.stop();
-                    if motorLeftSpeed < 0 and motorRightSpeed < 0:
+                if ultrasonic_distance != None:
+                    if ultrasonic_distance > 0:
                         motors.move_motors(motorLeftSpeed, motorRightSpeed)
-            else:
-                motors.move_motors(motorLeftSpeed, motorRightSpeed)                                    
+                    else:
+                        motors.stop();
+                        if motorLeftSpeed < 0 and motorRightSpeed < 0:
+                            motors.move_motors(motorLeftSpeed, motorRightSpeed)
+                else:
+                    motors.move_motors(motorLeftSpeed, motorRightSpeed)                                    
         elif event == 'turn_motors':
             if message['status'] == 'on':
                 relay.start()
             else:
                 relay.stop()
+        elif event == 'robot_mode':
+            if message['mode'] == 'autonomous':
+                robot_mode = 'autonomous'
+            else:
+                robot_mode = 'manual'
     except Exception as e:
         print e
 
-if __name__ == "__main__":
+def read_config():
     config = ConfigParser.RawConfigParser()
 
     try:
-        config.read('./config.cfg')
+        config.read('./config.cfg') 
 
         server_ip = config.get('Websocket', 'server_ip')
         server_port = config.get('Websocket', 'server_port')
 
+        width = config.getint('Image', 'width')
+        height = config.getint('Image', 'height')
+
+        colorLowerH = config.getint('ColorLower', 'H')
+        colorLowerS = config.getint('ColorLower', 'S')
+        colorLowerV = config.getint('ColorLower', 'V')
+
+        colorUpperH = config.getint('ColorUpper', 'H')
+        colorUpperS = config.getint('ColorUpper', 'S')
+        colorUpperV = config.getint('ColorUpper', 'V')
+
+        colorLower = (colorLowerH, colorLowerS, colorLowerV)
+        colorUpper = (colorUpperH, colorUpperS, colorUpperV)
+
+        return server_ip, server_port, width, height, colorLower, colorUpper
+    except Exception as e:
+        print e
+
+if __name__ == "__main__":
+    server_ip, server_port, width, height, colorLower, colorUpper = read_config()
+
+    camera = Camera(colorLower, colorUpper, width)
+
+    try:
         print 'Connecting to ' + server_ip + ':' + server_port + '...'
 
         thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Thread-1', ))
+        thread.start_new_thread(thread_robot_autonomous, ('Autonomous', ))        
 
         websocket.enableTrace(True)
         ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)

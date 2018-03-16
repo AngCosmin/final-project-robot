@@ -5,6 +5,7 @@ import {
 	Button,
 	Slider,
 	Text,
+	TextInput,
 	View,
 	TouchableHighlight,
 	Image,
@@ -19,16 +20,16 @@ export default class App extends React.Component {
 		this.state = {
 			motors: {
 				theyAreOn: false,
-				buttonText: 'TURN MOTORS ON',
-				buttonColor: '#27AE60', // Green
+				buttonText: 'Turn motors ON',
 			},
+			robotMode: 'Manual mode ON',
 			joystick: { 
 				x: 0, 
 				y: 0,
 				maxValue: 100,
 			},
+			serverIp: null,
 			connection: {
-				isConnected: false,
 				text: 'Waiting for connection...',
 				color: 'rgba(60, 60, 60, 0.5)', // Gray
 			},
@@ -115,23 +116,25 @@ export default class App extends React.Component {
 	}
 
 	connectToServer = () => {
-		this.ws = new WebSocket('ws://192.168.0.157:3000');
+		this.ws = new WebSocket('ws://' + this.state.serverIp + ':3000');
 
 		this.ws.onopen = () => {
-			this.ws.send(JSON.stringify({ 'event': 'connection', 'client': 'Mobile application' }));
 			this.setState({ 
 				connection: {
-					isConnected: true,
 					text: 'Connected',
 					color: 'rgba(39, 174, 96, 0.5)',
 				}
 			});
+
+			if (this.ws.readyState == 1) {			
+				this.ws.send(JSON.stringify({ 'event': 'connection', 'client': 'Mobile application' }));			
+			}
 		};
 
 		this.ws.onmessage = (e) => {
 			let object = JSON.parse(e.data);
 				
-			if (object.event == 'ping') {
+			if (object.event == 'ping' && this.ws.readyState === 1) {
 				this.ws.send(JSON.stringify({
 					'event': 'pong',
 					'timestamp': Date.now()
@@ -140,12 +143,9 @@ export default class App extends React.Component {
 			// console.warn('SERVER' + e.data);
 		};
 
-		this.ws.onerror = (e) => {
-			this.ws.send('close');
-			
+		this.ws.onerror = (e) => {			
 			this.setState({ 
 				connection: {
-					isConnected: false,
 					text: 'Connection error',
 					color: 'rgba(231, 76, 60, 0.5)',
 				}
@@ -153,17 +153,24 @@ export default class App extends React.Component {
 		};
 
 		this.ws.onclose = (e) => {
-			this.ws.send('close');
-
 			// If the connection dropped
 			// Try to reconnect
-			this.setState({ 
-				connection: {
-					isConnected: false,
-					text: 'Trying to connect...',
-					color: 'rgba(231, 76, 60, 0.5)',
-				}
-			});
+			if (this.state.serverIp == null) {
+				this.setState({ 
+					connection: {
+						text: 'Enter server ip...',
+						color: 'rgba(231, 76, 60, 0.5)',
+					}
+				});	
+			}
+			else {
+				this.setState({ 
+					connection: {
+						text: 'Trying to connect...',
+						color: 'rgba(231, 76, 60, 0.5)',
+					}
+				});
+			}
 
 			setTimeout(() => {
 				this.connectToServer();
@@ -174,7 +181,7 @@ export default class App extends React.Component {
 
 	sendMoveEvent = () =>
 	{
-		if (this.state.connection.isConnected) {
+		if (this.ws.readyState === 1 && this.state.robotMode === 'Manual mode ON') {
 			this.ws.send(JSON.stringify({ 
 				'event': 'move', 
 				'joystick_x': this.state.joystick.x, 
@@ -185,15 +192,14 @@ export default class App extends React.Component {
 
 	toggleMotorsStatus = () =>
 	{
-		if (this.state.connection.isConnected) {
+		if (this.ws.readyState === 1) {
 			if (this.state.motors.theyAreOn === false) {
 				// Turn motors on
 
 				this.setState({
 					motors: {
 						theyAreOn: true,
-						buttonText: 'TURN MOTORS OFF',
-						buttonColor: '#E74C3C', // Red						
+						buttonText: 'Turn motors OFF',
 					}
 				});
 	
@@ -208,14 +214,39 @@ export default class App extends React.Component {
 				this.setState({
 					motors: {
 						theyAreOn: false,
-						buttonText: 'TURN MOTORS ON',
-						buttonColor: '#27AE60', // Green						
+						buttonText: 'Turn motors ON',
 					}
 				});
 	
 				this.ws.send(JSON.stringify({
 					'event': 'turn_motors',
 					'status': 'off',
+				}));
+			}
+		}
+	}
+
+	toggleRobotMode = () =>
+	{
+		if (this.ws.readyState === 1) {
+			if (this.state.robotMode === 'Manual mode ON') {
+				this.setState({
+					robotMode: 'Autonomous mode ON'
+				});
+	
+				this.ws.send(JSON.stringify({
+					'event': 'change_mode',
+					'mode': 'autonomous',
+				}));
+			}
+			else {
+				this.setState({
+					robotMode: 'Manual mode ON'
+				});
+	
+				this.ws.send(JSON.stringify({
+					'event': 'change_mode',
+					'mode': 'manual',
 				}));
 			}
 		}
@@ -232,12 +263,7 @@ export default class App extends React.Component {
 				<View style={ styles.topContainer }>
 					<Text style = {{ color: this.state.connection.color }}>
 						{ this.state.connection.text }
-					</Text>
-					
-					<Button onPress = { this.toggleMotorsStatus } 
-							title = { this.state.motors.buttonText } 
-							color = { this.state.motors.buttonColor }>
-					</Button>
+					</Text>		
 				</View>
 				<View style={styles.bottomContainer}>				
 					<View style={styles.joystickContainer}>
@@ -249,6 +275,29 @@ export default class App extends React.Component {
 					</View>
 
 					<View style={styles.cameraContainer}>
+						<View style={ styles.connectToIp }>
+							<TextInput
+								style={ styles.inputServerIp }
+								onChangeText={ (ip) => this.setState({ serverIp: ip }) }
+								placeholder='Server IP'
+								value={this.state.text}
+							/>
+
+							<Button onPress = { this.connectToServer } 
+									title = 'Connect' 
+									color = { 'rgba(60, 60, 60, 0.5)' }>
+							</Button>	
+						</View>
+
+						<Button onPress = { this.toggleMotorsStatus } 
+								title = { this.state.motors.buttonText } 
+								color = { 'rgba(60, 60, 60, 0.5)' }>
+						</Button>	
+
+						<Button onPress = { this.toggleRobotMode } 
+								title = { this.state.robotMode } 
+								color = { 'rgba(60, 60, 60, 0.5)' }>
+						</Button>	
 					</View>
 				</View>
 			</View>
@@ -279,6 +328,7 @@ const styles = StyleSheet.create({
 	},
 	cameraContainer: {
 		flex: 0.55,
+		justifyContent: 'center',
 	},
 	circle: {
 		alignItems: 'center',
@@ -293,4 +343,18 @@ const styles = StyleSheet.create({
 		paddingTop: 5,
 		color: 'rgba(60, 60, 60, 0.5)',
 	},
+	inputServerIp: {
+		width: 140,
+		height: 30,
+		marginRight: 15,
+		borderColor: 'rgba(60, 60, 60, 0.2)',
+		borderWidth: 0.5,
+		borderRadius: 25,
+		textAlign: 'center',
+	},
+	connectToIp: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+	}
 });

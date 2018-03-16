@@ -16,12 +16,23 @@ let motors = new MotorsController();
 
 app.on('ready', function () {
     ui = new UI();
+
+    // Send ping to mobile app to check if it is still on
+    setInterval(() => {
+        ui.sendToView('server-ip', ip.address());    
+        
+        let isMobileAppConnected = mobileApp.checkConnection();
+
+        if (!isMobileAppConnected) {
+            ui.sendToView('mobile-app:status', 'Not connected');
+        }
+    }, 1000);
 });
 
 wss.on('connection', function (socket) {        
     socket.on('message', function (object) {
         object = JSON.parse(object);
-        // console.log(object);
+        console.log(object);
 
         let event = object.event;
         
@@ -50,14 +61,3 @@ wss.on('connection', function (socket) {
         }
     });
 });
-
-// Send ping to mobile app to check if it is still on
-setInterval(() => {
-    ui.sendToView('server-ip', ip.address());    
-    
-    let isMobileAppConnected = mobileApp.checkConnection();
-
-    if (!isMobileAppConnected) {
-        ui.sendToView('mobile-app:status', 'Not connected');
-    }
-}, 1000);
