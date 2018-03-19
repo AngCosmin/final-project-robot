@@ -54,6 +54,6 @@ if __name__ == '__main__':
         # loading()
         pulse()
     except KeyboardInterrupt:
+        time.sleep(1)
         for j in range(0, strip.numPixels(), 1):
             strip.setPixelColor(j, Color(0, 0, 0))
-        time.sleep(1)
