@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     #     time.sleep(1)
     while True:
-        now = datetime.datetime.now()1
+        now = datetime.datetime.now()
 
         # Low light during 19-8 o'clock
         if(8 < now.hour < 19):
