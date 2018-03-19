@@ -17,9 +17,9 @@ if __name__ == '__main__':
     strip.begin()
     strip.show()
 
-    strip.setPixelColor(0, Color(255, 0, 0))
-    strip.setPixelColor(1, Color(0, 255, 0))
-    strip.setPixelColor(2, Color(0, 0, 255))
+    strip.setPixelColor(15, Color(255, 0, 0))
+    strip.setPixelColor(14, Color(0, 255, 0))
+    strip.setPixelColor(13, Color(0, 0, 255))
 
     # while True:
     #     for i in range(0, strip.numPixels(), 1):
