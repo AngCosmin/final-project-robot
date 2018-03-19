@@ -37,13 +37,13 @@ def pulse():
             for j in range(0, strip.numPixels(), 1):
                 strip.setPixelColor(j, Color(i, i, i))
             strip.show()        
-            time.sleep(0.01)
+            time.sleep(0.001)
 
         for i in range(255, 0, -1):
             for j in range(0, strip.numPixels(), 1):
                 strip.setPixelColor(j, Color(i, i, i))
             strip.show()    
-            time.sleep(0.01)                        
+            time.sleep(0.001)                        
 
 
 
@@ -54,6 +54,7 @@ if __name__ == '__main__':
         # loading()
         pulse()
     except KeyboardInterrupt:
-        time.sleep(1)
+        time.sleep(0.5)
         for j in range(0, strip.numPixels(), 1):
             strip.setPixelColor(j, Color(0, 0, 0))
+        time.sleep(0.5)            
