@@ -21,6 +21,7 @@ if __name__ == '__main__':
         strip.setPixelColor(i, Color(0, 0, 0))
 
     for i in range(0, strip.numPixels(), 1):
+        print 'Doing stuff'
         strip.setPixelColor(i, Color(255, 255, 255))
     
     strip.show()
