@@ -55,4 +55,4 @@ if __name__ == '__main__':
         time.sleep(0.5)
         for j in range(0, strip.numPixels(), 1):
             strip.setPixelColor(j, Color(0, 0, 0))
-        time.sleep(0.5)            
+            time.sleep(0.05)            
