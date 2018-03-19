@@ -22,8 +22,9 @@ if __name__ == '__main__':
 
     for i in range(0, strip.numPixels(), 1):
         strip.setPixelColor(i, Color(255, 255, 255))
-
-    time.sleep(1);
+    
+    strip.show()
+    time.sleep(1)
     # while True:
     #     now = datetime.datetime.now()
 
