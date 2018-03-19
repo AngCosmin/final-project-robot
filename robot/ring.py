@@ -21,13 +21,15 @@ def loading():
                 strip.setPixelColor(j, Color(0, 0, 0))
 
             if i == 0:
-                strip.setPixelColor(16, Color(255, 0, 0))            
+                strip.setPixelColor(16, Color(100, 0, 0))            
+                strip.setPixelColor(15, Color(25, 0, 0))            
             else:
                 strip.setPixelColor(i - 1, Color(100, 0, 0))
+                strip.setPixelColor(i - 2, Color(25, 0, 0))
                 
             strip.setPixelColor(i, Color(255, 0, 0))
             strip.show()        
-            time.sleep(0.10)
+            time.sleep(0.05)
 
 
 if __name__ == '__main__':
