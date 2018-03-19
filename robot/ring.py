@@ -17,20 +17,20 @@ if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     strip.begin()
 
-    while True:
-        for i in range(0, strip.numPixels(), 1):
-            strip.setPixelColor(i, Color(0, 0, 0))
-            strip.show()        
-            time.sleep(0.25)
+    # while True:
+    #     for i in range(0, strip.numPixels(), 1):
+    #         strip.setPixelColor(i, Color(0, 0, 0))
+    #         strip.show()        
+    #         time.sleep(0.25)
 
-        time.sleep(1)
+    #     time.sleep(1)
 
-        for i in range(0, strip.numPixels(), 1):
-            strip.setPixelColor(i, Color(255, 0, 0))
-            time.sleep(0.25)            
-            strip.show()        
+    #     for i in range(0, strip.numPixels(), 1):
+    #         strip.setPixelColor(i, Color(255, 0, 0))
+    #         time.sleep(0.25)            
+    #         strip.show()        
 
-        time.sleep(1)
+    #     time.sleep(1)
     # while True:
     #     now = datetime.datetime.now()1
 
