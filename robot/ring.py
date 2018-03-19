@@ -20,14 +20,14 @@ if __name__ == '__main__':
     while True:
         for i in range(0, strip.numPixels(), 1):
             strip.setPixelColor(i, Color(0, 0, 0))
+            strip.show()        
 
-        strip.show()        
         time.sleep(1)
 
         for i in range(0, strip.numPixels(), 1):
             strip.setPixelColor(i, Color(255, 0, 0))
-            
-        strip.show()        
+            strip.show()        
+
         time.sleep(1)
     # while True:
     #     now = datetime.datetime.now()1
