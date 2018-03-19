@@ -36,12 +36,12 @@ def pulse():
         for i in range(0, 255, 1):
             for j in range(0, strip.numPixels(), 1):
                 strip.setPixelColor(j, Color(i, i, i))
-
-        strip.show()        
+            strip.show()        
 
         for i in range(255, 0, -1):
             for j in range(0, strip.numPixels(), 1):
                 strip.setPixelColor(j, Color(i, i, i))
+            strip.show()                
 
 
 
