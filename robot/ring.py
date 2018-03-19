@@ -31,7 +31,18 @@ def loading():
             strip.show()        
             time.sleep(0.05)
 
+def pulse():
+    while True:
+        for i in range(0, 255, 1):
+            for j in range(0, strip.numPixels(), 1):
+                strip.setPixelColor(j, Color(i, i, i))
+
+            strip.show()        
+            time.sleep(0.05)
+
+
 
 if __name__ == '__main__':
     strip.begin()
-    loading()
+    # loading()
+    pulse()
