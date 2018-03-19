@@ -31,42 +31,42 @@ if __name__ == '__main__':
     #         strip.show()        
 
     #     time.sleep(1)
-    # while True:
-    #     now = datetime.datetime.now()1
+    while True:
+        now = datetime.datetime.now()1
 
-    #     # Low light during 19-8 o'clock
-    #     if(8 < now.hour < 19):
-    #         strip.setBrightness(200)
-    #     else:
-    #         strip.setBrightness(25)
+        # Low light during 19-8 o'clock
+        if(8 < now.hour < 19):
+            strip.setBrightness(200)
+        else:
+            strip.setBrightness(25)
 
-    #     hour = now.hour % 12
-    #     minute = now.minute / 5
-    #     second = now.second / 5
-    #     secondmodulo = now.second % 5
-    #     timeslot_in_microseconds = secondmodulo * 1000000 + now.microsecond
-    #     for i in range(0, strip.numPixels(), 1):
-    #         secondplusone = second + 1 if(second < 11) else 0
-    #         secondminusone = second - 1 if(second > 0) else 11
-    #         colorarray = [0, 0, 0]
+        hour = now.hour % 12
+        minute = now.minute / 5
+        second = now.second / 5
+        secondmodulo = now.second % 5
+        timeslot_in_microseconds = secondmodulo * 1000000 + now.microsecond
+        for i in range(0, strip.numPixels(), 1):
+            secondplusone = second + 1 if(second < 11) else 0
+            secondminusone = second - 1 if(second > 0) else 11
+            colorarray = [0, 0, 0]
 
-    #         if i == second:
-    #             if timeslot_in_microseconds < 2500000:
-    #                 colorarray[0] = int(
-    #                     0.0000508 * timeslot_in_microseconds) + 126
-    #             else:
-    #                 colorarray[0] = 382 - \
-    #                     int(0.0000508 * timeslot_in_microseconds)
-    #         if i == secondplusone:
-    #             colorarray[0] = int(0.0000256 * timeslot_in_microseconds)
-    #         if i == secondminusone:
-    #             colorarray[0] = int(
-    #                 0.0000256 * timeslot_in_microseconds) * -1 + 128
-    #         if i == minute:
-    #             colorarray[2] = 200
-    #         if i == hour:
-    #             colorarray[1] = 200
-    #         strip.setPixelColor(
-    #             i, Color(colorarray[0], colorarray[1], colorarray[2]))
-    #     strip.show()
-    #     time.sleep(0.1)
+            if i == second:
+                if timeslot_in_microseconds < 2500000:
+                    colorarray[0] = int(
+                        0.0000508 * timeslot_in_microseconds) + 126
+                else:
+                    colorarray[0] = 382 - \
+                        int(0.0000508 * timeslot_in_microseconds)
+            if i == secondplusone:
+                colorarray[0] = int(0.0000256 * timeslot_in_microseconds)
+            if i == secondminusone:
+                colorarray[0] = int(
+                    0.0000256 * timeslot_in_microseconds) * -1 + 128
+            if i == minute:
+                colorarray[2] = 200
+            if i == hour:
+                colorarray[1] = 200
+            strip.setPixelColor(
+                i, Color(colorarray[0], colorarray[1], colorarray[2]))
+        strip.show()
+        time.sleep(0.1)
