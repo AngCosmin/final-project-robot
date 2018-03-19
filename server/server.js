@@ -55,6 +55,9 @@ wss.on('connection', function (socket) {
             case 'turn_motors':
                 motors.changeStatus(object.status);
                 break;
+            case 'change_mode':
+                motors.changeMode(object.mode);
+                break;
             case 'pong':
                 mobileApp.setPongReceivedTimestamp(object.timestamp);
                 break;

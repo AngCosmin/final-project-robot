@@ -92,6 +92,15 @@ class MotorController {
             console.log('Robot not connected to the server!');
         }
     }
+
+    changeMode(mode) {
+        if (this.robot != null && this.robot.readyState == WebSocket.OPEN) {
+            this.robot.send(JSON.stringify({ 'event': 'robot_mode', 'mode': mode }));
+        }
+        else {
+            console.log('Robot not connected to the server!');
+        }
+    }
 }
 
 module.exports = MotorController;
