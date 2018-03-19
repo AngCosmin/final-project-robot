@@ -19,6 +19,12 @@ def loading():
         for i in range(0, strip.numPixels(), 1):
             for j in range(0, strip.numPixels(), 1):
                 strip.setPixelColor(j, Color(0, 0, 0))
+
+            if i == 0:
+                strip.setPixelColor(16, Color(255, 0, 0))            
+            else:
+                strip.setPixelColor(i - 1, Color(100, 0, 0))
+                
             strip.setPixelColor(i, Color(255, 0, 0))
             strip.show()        
             time.sleep(0.10)
