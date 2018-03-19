@@ -47,5 +47,10 @@ def pulse():
 
 if __name__ == '__main__':
     strip.begin()
-    # loading()
-    pulse()
+
+    try:
+        # loading()
+        pulse()
+    except KeyboardInterrupt:
+        for j in range(0, strip.numPixels(), 1):
+            strip.setPixelColor(j, Color(0, 0, 0))
