@@ -16,7 +16,7 @@ LED_CHANNEL = 1 # set to '1' for GPIOs 13, 19, 41, 45, 53
 
 strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
 
-def loading():
+def loading(color):
     while True:
         for i in range(0, strip.numPixels(), 1):
             for j in range(0, strip.numPixels(), 1):
@@ -47,10 +47,18 @@ def pulse(color):
             strip.setBrightness(i)    
             strip.show()
 
+def rainbow_cycle(wait_ms=20, iterations=5):
+    for j in range(256*iterations):
+        for i in range(strip.numPixels()):
+            strip.setPixelColor(i, wheel((int(i * 256 / strip.numPixels()) + j) & 255))
+        strip.show()
+        time.sleep(wait_ms/1000.0)
+
 if __name__ == '__main__':
     strip.begin()
 
     try:
+        rainbow_cycle()
         # loading()
         pulse(Color(255, 100, 100))
     except KeyboardInterrupt:
