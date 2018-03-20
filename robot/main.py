@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import ConfigParser
 import websocket
 import thread
