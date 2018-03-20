@@ -58,7 +58,7 @@ def wheel(pos):
         pos -= 170
         return Color(0, pos * 3, 255 - pos * 3)
 
-def rainbow_cycle(wait_ms=20, iterations=5):
+def rainbow_cycle(wait_ms=20, iterations=1):
     for j in range(256*iterations):
         for i in range(strip.numPixels()):
             strip.setPixelColor(i, wheel((int(i * 256 / strip.numPixels()) + j) & 255))
