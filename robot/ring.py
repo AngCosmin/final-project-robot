@@ -73,6 +73,11 @@ if __name__ == '__main__':
         rainbow_cycle()
         # loading()
         pulse(Color(255, 100, 100))
+        time.sleep(0.5)
+        for j in range(0, strip.numPixels(), 1):
+            strip.setPixelColor(j, Color(0, 0, 0))
+            time.sleep(0.05)            
+            strip.show()
     except KeyboardInterrupt:
         time.sleep(0.5)
         for j in range(0, strip.numPixels(), 1):
