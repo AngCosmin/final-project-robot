@@ -38,7 +38,7 @@ def pulse(color):
         strip.setPixelColor(j, color)
         strip.show()    
 
-    for j in range(0, 50, 1):
+    for j in range(0, 10, 1):
     # while True:
         for i in range(0, 255, 1):
             strip.setBrightness(i)    
