@@ -41,9 +41,11 @@ def pulse(color):
     while True:
         for i in range(0, 255, 1):
             strip.setBrightness(i)    
+            strip.show()
 
         for i in range(255, 0, -1):
             strip.setBrightness(i)    
+            strip.show()
 
 if __name__ == '__main__':
     strip.begin()
