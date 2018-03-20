@@ -38,7 +38,8 @@ def pulse(color):
         strip.setPixelColor(j, color)
         strip.show()    
 
-    while True:
+    for i in range(0, 500, 1):
+    # while True:
         for i in range(0, 255, 1):
             strip.setBrightness(i)    
             strip.show()
@@ -58,7 +59,7 @@ def wheel(pos):
         pos -= 170
         return Color(0, pos * 3, 255 - pos * 3)
 
-def rainbow_cycle(wait_ms=20, iterations=1):
+def rainbow_cycle(wait_ms=10, iterations=2):
     for j in range(256*iterations):
         for i in range(strip.numPixels()):
             strip.setPixelColor(i, wheel((int(i * 256 / strip.numPixels()) + j) & 255))
