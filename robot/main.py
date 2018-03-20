@@ -33,6 +33,7 @@ def clean():
     servo.clean()
     ultrasonic.clean()
     camera.clean()
+    sleep(0.5)
     GPIO.cleanup()
 
 def thread_calculate_ultrasonic_distance(thread_name):
