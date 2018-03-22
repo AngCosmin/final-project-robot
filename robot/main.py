@@ -68,7 +68,7 @@ def thread_robot_autonomous(thread_name):
     try: 
         while True:
             if robot_mode == 'autonomous': 
-                # frame, mask, object_x, object_y = camera.compute()
+                frame, mask, object_x, object_y = camera.compute()
                 # ultrasonic.measure()
                 # print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
                 print 'something'
