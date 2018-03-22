@@ -68,26 +68,27 @@ def thread_robot_autonomous(thread_name):
     try: 
         while True:
             if robot_mode == 'autonomous': 
-                frame, mask, object_x, object_y = camera.compute()
+                # frame, mask, object_x, object_y = camera.compute()
                 # ultrasonic.measure()
-                print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
+                # print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
+                print 'something'
 
-                if object_x != sys.maxint and object_y != sys.maxint:
-                    object_x = object_x - width / 2
-                    object_y = object_y - height / 2
+                # if object_x != sys.maxint and object_y != sys.maxint:
+                    # object_x = object_x - width / 2
+                    # object_y = object_y - height / 2
                     
-                    lights_mode = 'ball_found'
+                    # lights_mode = 'ball_found'
 
                 #     # Activate motors
                 #     # motors.go_to_object(object_x)
 
                     # Activate servo
-                    servo.compute(object_y)
+                    # servo.compute(object_y)
 
                 #     motors.lastActiveTime = time()
-                    servo.lastActiveTime = time()
-                else:
-                    lights_mode = 'ball_lost'
+                    # servo.lastActiveTime = time()
+                # else:
+                    # lights_mode = 'ball_lost'
                     # motors.stop()
                     # motors.randomly_activate()
                     # servo.randomly_activate()
