@@ -209,6 +209,5 @@ if __name__ == "__main__":
         ws.on_close = on_close
         ws.run_forever()
     except Exception as e:
-        motors.clean()
-        relay.clean()
+        clean()
         print e
