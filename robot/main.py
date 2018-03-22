@@ -55,7 +55,7 @@ def thread_robot_autonomous(thread_name):
             if robot_mode == 'autonomous': 
                 print 'Autonomous mode on'
                 
-                # frame, mask, object_x, object_y = camera.compute()
+                frame, mask, object_x, object_y = camera.compute()
                 # ultrasonic.measure()
 
                 # if object_x != sys.maxint and object_y != sys.maxint:
