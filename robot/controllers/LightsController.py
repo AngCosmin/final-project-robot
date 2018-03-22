@@ -55,9 +55,7 @@ class LightsController:
     def clean(self):
         print 'Cleaning up LEDs...'        
         
-        sleep(0.5)
         for j in range(0, self.strip.numPixels(), 1):
             self.strip.setPixelColor(j, Color(0, 0, 0))
             sleep(0.05)            
             self.strip.show()  
-        sleep(0.5)
