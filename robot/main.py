@@ -150,6 +150,7 @@ def on_message(ws, message):
             print 'Changing mode to ' + message['mode']
             if message['mode'] == 'autonomous':
                 robot_mode = 'autonomous'
+                servo.change(1500)
             else:
                 robot_mode = 'manual'
     except Exception as e:
