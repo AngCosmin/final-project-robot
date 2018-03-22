@@ -56,8 +56,7 @@ def thread_lights_changes(thread_name):
 
     while True:
         if lights_mode == 'ball_lost':
-            # lights.animation_loading(0, 255, 0)
-            lights.animation_rainbow()            
+            lights.animation_loading(0, 255, 0)
         elif lights_mode == 'ball_found':
             print 'Animation rainbow'            
             lights.animation_rainbow()
