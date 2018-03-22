@@ -86,6 +86,8 @@ def thread_robot_autonomous(thread_name):
                 if key == ord("q"):
                     clean()
                     break		
+            else:
+                print 'Manual mode on'
     except KeyboardInterrupt:
         clean()
     
@@ -127,6 +129,7 @@ def on_message(ws, message):
             else:
                 relay.stop()
         elif event == 'robot_mode':
+            print 'Changing mode to ' + message['mode']
             if message['mode'] == 'autonomous':
                 robot_mode = 'autonomous'
             else:
