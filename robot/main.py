@@ -61,6 +61,13 @@ def thread_lights_changes(thread_name):
             print 'Animation rainbow'            
             lights.animation_rainbow()
 
+def thread_robot_randomly_activate(thread_name):
+    global robot_mode
+
+    if robot_mode == 'autonomous':    
+        servo.randomly_activate()
+
+
 def thread_robot_autonomous(thread_name):
     global robot_mode
     global lights_mode
@@ -70,28 +77,26 @@ def thread_robot_autonomous(thread_name):
             if robot_mode == 'autonomous': 
                 frame, mask, object_x, object_y = camera.compute()
                 # ultrasonic.measure()
-                # print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
-                print 'something'
+                print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
 
-                # if object_x != sys.maxint and object_y != sys.maxint:
-                    # object_x = object_x - width / 2
-                    # object_y = object_y - height / 2
+                if object_x != sys.maxint and object_y != sys.maxint:
+                    object_x = object_x - width / 2
+                    object_y = object_y - height / 2
                     
-                    # lights_mode = 'ball_found'
+                    lights_mode = 'ball_found'
 
-                #     # Activate motors
-                #     # motors.go_to_object(object_x)
+                    # Activate motors
+                    # motors.go_to_object(object_x)
 
                     # Activate servo
-                    # servo.compute(object_y)
+                    servo.compute(object_y)
 
-                #     motors.lastActiveTime = time()
-                    # servo.lastActiveTime = time()
+                    # motors.lastActiveTime = time()
+                    servo.lastActiveTime = time()
                 # else:
-                    # lights_mode = 'ball_lost'
+                    lights_mode = 'ball_lost'
                     # motors.stop()
                     # motors.randomly_activate()
-                    # servo.randomly_activate()
 
                 # # show the frame
                 # cv2.imshow("Frame", frame)    
@@ -191,6 +196,7 @@ if __name__ == "__main__":
         thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Distance', ))
         thread.start_new_thread(thread_robot_autonomous, ('Autonomous', ))        
         thread.start_new_thread(thread_lights_changes, ('Lights', ))        
+        thread.start_new_thread(thread_robot_randomly_activate, ('RandomlyActivate', ))        
 
         websocket.enableTrace(True)
         ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
