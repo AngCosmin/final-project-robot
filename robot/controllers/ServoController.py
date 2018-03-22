@@ -22,7 +22,7 @@ class ServoController:
             # The time when he did last action
             self.lastActiveTime = 0
             self.movingTime = None
-            self.lastDirection = None
+            self.lastDirection = 1500
         except Exception as e:
             print e
 
