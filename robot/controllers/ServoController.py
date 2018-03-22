@@ -55,7 +55,8 @@ class ServoController:
                 # Choose a random direction to move
                 direction = randint(1000, 2000)
                 while abs(self.lastDirection - direction) < 300:
-                    direction = randint(1000, 2000)                    
+                    direction = randint(1000, 2000)             
+                print 'Generated direction to ' + str(direction)       
             else:
                 if self.movingTime - time() > 0:
                     self.change(direction)							
