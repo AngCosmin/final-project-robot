@@ -30,8 +30,6 @@ ultrasonic = UltrasonicController()
 servo = ServoController()
 lights = LightsController()
 
-servo.lastActiveTime = time()
-
 def clean():
     motors.clean()
     relay.clean()
@@ -80,9 +78,6 @@ def thread_robot_autonomous(thread_name):
                     
                     lights_mode = 'ball_found'
 
-                #     # Update the last active time
-                #     lastActiveTime = time()
-
                 #     # Activate motors
                 #     # motors.go_to_object(object_x)
 
@@ -99,7 +94,7 @@ def thread_robot_autonomous(thread_name):
 
                 # # show the frame
                 # cv2.imshow("Frame", frame)    
-                # cv2.imshow("Mask", mask)
+                # cv2.imshow("Mask", mask)e
                 
                 # key = cv2.waitKey(1) & 0xFF
 
