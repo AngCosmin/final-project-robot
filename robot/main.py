@@ -54,40 +54,41 @@ def thread_robot_autonomous(thread_name):
             if robot_mode == 'autonomous': 
                 print 'Autonomous mode on'
                 
-                frame, mask, object_x, object_y = camera.compute()
-                ultrasonic.measure()
+                # frame, mask, object_x, object_y = camera.compute()
+                # ultrasonic.measure()
 
-                if object_x != sys.maxint and object_y != sys.maxint:
-                    object_x = object_x - width / 2
-                    object_y = object_y - height / 2
+                # if object_x != sys.maxint and object_y != sys.maxint:
+                #     object_x = object_x - width / 2
+                #     object_y = object_y - height / 2
 
-                    # Update the last active time
-                    lastActiveTime = time()
+                #     # Update the last active time
+                #     lastActiveTime = time()
 
-                    # Activate motors
-                    # motors.go_to_object(object_x)
+                #     # Activate motors
+                #     # motors.go_to_object(object_x)
 
-                    # Activate servo
-                    servo.compute(object_y)
+                #     # Activate servo
+                #     servo.compute(object_y)
 
-                    motors.lastActiveTime = time()
-                    servo.lastActiveTime = time()
-                else:
-                    motors.stop()
-                    # motors.randomly_activate()
-                    # servo.randomly_activate()
+                #     motors.lastActiveTime = time()
+                #     servo.lastActiveTime = time()
+                # else:
+                #     motors.stop()
+                #     # motors.randomly_activate()
+                #     # servo.randomly_activate()
 
-                # show the frame
-                cv2.imshow("Frame", frame)    
-                cv2.imshow("Mask", mask)
+                # # show the frame
+                # cv2.imshow("Frame", frame)    
+                # cv2.imshow("Mask", mask)
                 
-                key = cv2.waitKey(1) & 0xFF
+                # key = cv2.waitKey(1) & 0xFF
 
-                if key == ord("q"):
-                    clean()
-                    break		
+                # if key == ord("q"):
+                #     clean()
+                #     break		
             else:
                 print 'Manual mode on'
+            sleep(1)
     except KeyboardInterrupt:
         clean()
     
