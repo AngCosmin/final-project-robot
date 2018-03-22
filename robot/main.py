@@ -71,6 +71,8 @@ def thread_robot_autonomous(thread_name):
                 # ultrasonic.measure()
 
                 if object_x != sys.maxint and object_y != sys.maxint:
+                    print 'Lights mode: PULSE'
+                    
                     object_x = object_x - width / 2
                     object_y = object_y - height / 2
                     
@@ -90,6 +92,7 @@ def thread_robot_autonomous(thread_name):
                 #     servo.lastActiveTime = time()
                 else:
                     lights_mode = 'loading'
+                    print 'Lights mode: LOADING'
                 #     motors.stop()
                 #     # motors.randomly_activate()
                 #     # servo.randomly_activate()
