@@ -17,15 +17,8 @@ class LightsController:
             LED_INVERT = False
             LED_CHANNEL = config.getint('Lights', 'LED_CHANNEL')        # Set to '1' for GPIOs 13, 19, 41, 45, 53 
 
-            print 'COUNT ' + str(LED_COUNT)
-            print 'PIN ' + str(LED_PIN)
-            print 'FREQ ' + str(LED_FREQ_HZ)
-            print 'DMA ' + str(LED_DMA)
-            print 'BRIGHTNESS ' + str(LED_BRIGHTNESS)
-            print 'INVERT ' + str(LED_INVERT)
-            print 'CHANNEL ' + str(LED_CHANNEL)
-
             self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+            print (self.strip.numPixels())
         except Exception as e:
             print e  
 
