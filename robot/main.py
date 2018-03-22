@@ -55,14 +55,9 @@ def thread_lights_changes(thread_name):
     global lights_mode
 
     while True:
-        if lights_mode == 'loading':
-            print 'Animation loading'
+        if lights_mode == 'ball_lost':
             lights.animation_loading()
-        elif lights_mode == 'pulse':
-            print 'Animation pulse' 
-            # lights.animation_rainbow()                       
-            lights.animation_pulse()
-        elif lights_mode == 'rainbow':
+        elif lights_mode == 'ball_found':
             print 'Animation rainbow'            
             lights.animation_rainbow()
 
@@ -81,7 +76,7 @@ def thread_robot_autonomous(thread_name):
                     object_x = object_x - width / 2
                     object_y = object_y - height / 2
                     
-                    lights_mode = 'pulse'
+                    lights_mode = 'ball_found'
 
                 #     # Update the last active time
                 #     lastActiveTime = time()
@@ -95,7 +90,7 @@ def thread_robot_autonomous(thread_name):
                 #     motors.lastActiveTime = time()
                 #     servo.lastActiveTime = time()
                 else:
-                    lights_mode = 'loading'
+                    lights_mode = 'ball_lost'
                 #     motors.stop()
                 #     # motors.randomly_activate()
                 #     # servo.randomly_activate()

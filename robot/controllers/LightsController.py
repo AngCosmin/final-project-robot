@@ -51,22 +51,9 @@ class LightsController:
                 self.strip.setPixelColor(i - 1, Color(100, 0, 0))
                 self.strip.setPixelColor(i - 2, Color(25, 0, 0))
                 
-            self.strip.setPixelColor(i, Color(255, 0, 0))
+            self.strip.setPixelColor(i, Color(0, 255, 0))
             self.strip.show()        
             sleep(0.05)
-
-    def animation_pulse(self):
-        for i in range(0, self.strip.numPixels(), 1):
-            self.strip.setPixelColor(i, Color(255, 0, 0))
-            self.strip.show()    
-
-        for i in range(0, 255, 30):
-            self.strip.setBrightness(i)    
-            self.strip.show()
-
-        for i in range(255, 0, -30):
-            self.strip.setBrightness(i)    
-            self.strip.show()
 
 
     def clean(self):
