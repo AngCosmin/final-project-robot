@@ -18,7 +18,7 @@ class LightsController:
             LED_CHANNEL = config.getint('Lights', 'LED_CHANNEL')        # Set to '1' for GPIOs 13, 19, 41, 45, 53 
 
             self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-            print (self.strip.numPixels())
+            self.strip.setPixelColor(0, Color(255, 0, 0))
         except Exception as e:
             print e  
 
