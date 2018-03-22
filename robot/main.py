@@ -57,6 +57,8 @@ def thread_lights_changes(thread_name):
     while True:
         if lights_mode == 'loading':
             lights.animation_loading()
+        if lights_mode == 'pulse':
+            lights.animation_pulse()
 
 def thread_robot_autonomous(thread_name):
     global robot_mode
@@ -70,6 +72,8 @@ def thread_robot_autonomous(thread_name):
                 if object_x != sys.maxint and object_y != sys.maxint:
                     object_x = object_x - width / 2
                     object_y = object_y - height / 2
+                    
+                    lights_mode = 'pulse'
 
                     print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
                 #     # Update the last active time
@@ -83,7 +87,8 @@ def thread_robot_autonomous(thread_name):
 
                 #     motors.lastActiveTime = time()
                 #     servo.lastActiveTime = time()
-                # else:
+                else:
+                    lights_mode = 'loading'
                 #     motors.stop()
                 #     # motors.randomly_activate()
                 #     # servo.randomly_activate()
