@@ -93,7 +93,7 @@ def thread_robot_autonomous(thread_name):
                     lights_mode = 'ball_lost'
                 #     motors.stop()
                 #     # motors.randomly_activate()
-                #     # servo.randomly_activate()
+                    servo.randomly_activate()
 
                 # # show the frame
                 # cv2.imshow("Frame", frame)    
@@ -150,7 +150,6 @@ def on_message(ws, message):
             print 'Changing mode to ' + message['mode']
             if message['mode'] == 'autonomous':
                 robot_mode = 'autonomous'
-                servo.change(1500)
             else:
                 robot_mode = 'manual'
     except Exception as e:
