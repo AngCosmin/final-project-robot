@@ -97,9 +97,7 @@ def thread_robot_autonomous(thread_name):
                 # if key == ord("q"):
                 #     clean()
                 #     break		
-            else:
-                print 'Manual mode on'
-    except KeyboardInterrupt:
+    except Exception:
         clean()
     
 def on_open(ws):

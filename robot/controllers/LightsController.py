@@ -22,6 +22,7 @@ class LightsController:
             print e  
 
     def animation_loading(self):
+        print 'In animation loading'
         for i in range(0, self.strip.numPixels(), 1):
             for j in range(0, self.strip.numPixels(), 1):
                 self.strip.setPixelColor(j, Color(0, 0, 0))
@@ -35,7 +36,7 @@ class LightsController:
                 
             self.strip.setPixelColor(i, Color(255, 0, 0))
             self.strip.show()        
-            time.sleep(0.05)
+            sleep(0.05)
 
     def clean(self):
         print 'Cleaning up LEDs...'        
