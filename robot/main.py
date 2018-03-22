@@ -65,8 +65,9 @@ def thread_robot_randomly_activate(thread_name):
     global robot_mode
     global servo
 
-    if robot_mode == 'autonomous':    
-        servo.randomly_activate()
+    while True:
+        if robot_mode == 'autonomous':    
+            servo.randomly_activate()
 
 
 def thread_robot_autonomous(thread_name):
