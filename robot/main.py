@@ -16,16 +16,19 @@ from controllers.MotorsController import MotorsController
 from controllers.RelayController import RelayController
 from controllers.UltrasonicController import UltrasonicController
 from controllers.ServoController import ServoController
+from controllers.LightsController import LightsController
 from controllers.Camera import Camera
 
 ws = None
 ultrasonic_distance = 0
 robot_mode = 'manual'
+led_mode = 'loading'
 
 motors = MotorsController()
 relay = RelayController()
 ultrasonic = UltrasonicController()
 servo = ServoController()
+lights = LightsController()
 
 def clean():
     motors.clean()
@@ -33,6 +36,7 @@ def clean():
     servo.clean()
     ultrasonic.clean()
     camera.clean()
+    lights.clean() 
     sleep(0.5)
     GPIO.cleanup()
 
@@ -46,6 +50,13 @@ def thread_calculate_ultrasonic_distance(thread_name):
         if ultrasonic_distance == 0:
             motors.stop();            
         sleep(0.05);
+
+def thread_led_changes(thread_name):
+    global led_mode
+
+    while True:
+        if led_mode == 'loading':
+            lights.animation_loading()
 
 def thread_robot_autonomous(thread_name):
     global robot_mode
@@ -172,8 +183,9 @@ if __name__ == "__main__":
     try:
         print 'Connecting to ' + server_ip + ':' + server_port + '...'
 
-        thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Thread-1', ))
+        thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Distance', ))
         thread.start_new_thread(thread_robot_autonomous, ('Autonomous', ))        
+        thread.start_new_thread(thread_led_changes, ('Lights', ))        
 
         websocket.enableTrace(True)
         ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
