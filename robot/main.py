@@ -58,10 +58,11 @@ def thread_robot_autonomous(thread_name):
                 frame, mask, object_x, object_y = camera.compute()
                 # ultrasonic.measure()
 
-                # if object_x != sys.maxint and object_y != sys.maxint:
-                #     object_x = object_x - width / 2
-                #     object_y = object_y - height / 2
+                if object_x != sys.maxint and object_y != sys.maxint:
+                    object_x = object_x - width / 2
+                    object_y = object_y - height / 2
 
+                    print 'Object X: ' + object_x + ' Object Y: ' + object_y
                 #     # Update the last active time
                 #     lastActiveTime = time()
 
