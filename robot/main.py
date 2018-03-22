@@ -63,6 +63,7 @@ def thread_lights_changes(thread_name):
 
 def thread_robot_randomly_activate(thread_name):
     global robot_mode
+    global servo
 
     if robot_mode == 'autonomous':    
         servo.randomly_activate()
