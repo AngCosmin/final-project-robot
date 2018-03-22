@@ -69,8 +69,8 @@ def thread_robot_autonomous(thread_name):
                 #     # Activate motors
                 #     # motors.go_to_object(object_x)
 
-                #     # Activate servo
-                #     servo.compute(object_y)
+                    # Activate servo
+                    servo.compute(object_y)
 
                 #     motors.lastActiveTime = time()
                 #     servo.lastActiveTime = time()
