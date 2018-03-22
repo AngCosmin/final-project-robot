@@ -44,19 +44,15 @@ class ServoController:
                 self.head.change(self.servoValue)
 
     def randomly_activate(self):
-        print 'Randomly activate'
         if time() - self.lastActiveTime > 3:
-            print 'Inactive for 3 seconds'
             # He stayed for 3 seconds
 
             if self.movingTime == None:
-                print 'movingTime NONE'
                 self.movingTime = time() + 1
 
                 # Choose a random direction to move
                 self.direction = randint(1000, 2000)
             else:
-                print 'movingTime - time() = ' + str(self.movingTime) + ' - ' + str(time())
                 if self.movingTime - time() > 0:
                     self.change(self.direction)							
                 else:
