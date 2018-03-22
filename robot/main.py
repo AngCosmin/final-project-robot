@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
         thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Distance', ))
         thread.start_new_thread(thread_robot_autonomous, ('Autonomous', ))        
-        # thread.start_new_thread(thread_lights_changes, ('Lights', ))        
+        thread.start_new_thread(thread_lights_changes, ('Lights', ))        
 
         websocket.enableTrace(True)
         ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
