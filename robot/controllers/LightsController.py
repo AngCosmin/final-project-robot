@@ -32,8 +32,8 @@ class LightsController:
             pos -= 170
             return Color(0, pos * 3, 255 - pos * 3)
 
-    def animation_rainbow(self, wait_ms=5, iterations=4):
-        for j in range(256*iterations):
+    def animation_rainbow(self, wait_ms=5):
+        for j in range(256):
             for i in range(self.strip.numPixels()):
                 self.strip.setPixelColor(i, self.wheel((int(i * 256 / self.strip.numPixels()) + j) & 255))
             self.strip.show()
