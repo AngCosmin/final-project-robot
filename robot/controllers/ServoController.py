@@ -18,11 +18,12 @@ class ServoController:
             self.head = Servo(pin)
             self.servoValue = 1500
             self.head.change(1500)
-            self.lastDirection = 1500
 
             # The time when he did last action
             self.lastActiveTime = 0
             self.movingTime = None
+            self.direction = None  
+            self.lastDirection = None
         except Exception as e:
             print e
 
@@ -44,8 +45,6 @@ class ServoController:
                 self.head.change(self.servoValue)
 
     def randomly_activate(self):
-        direction = None
-
         if time() - self.lastActiveTime > 3:
             # He stayed for 3 seconds
 
@@ -53,14 +52,15 @@ class ServoController:
                 self.movingTime = time() + 2
 
                 # Choose a random direction to move
-                direction = randint(1000, 2000)
-                while abs(self.lastDirection - direction) < 300:
-                    direction = randint(1000, 2000)             
+                self.direction = randint(1000, 2000)
+
+                while abs(self.lastDirection - self.direction) < 300:
+                    self.direction = randint(100, 2000)
             else:
-                if direction != None and self.movingTime - time() > 0:
-                    print 'MOVE to ' + str(direction)
-                    self.change(direction)							
-                    self.lastDirection = direction
+                if self.movingTime - time() > 0:
+                    print 'Move to ' + self.direction
+                    self.change(self.direction)							
+                    self.lastDirection = self.direction
                 else:
                     self.movingTime = None
                     self.lastActiveTime = time()
@@ -68,4 +68,5 @@ class ServoController:
     def clean(self):
         print '[PINS] Cleaning up servo pins...'
         self.head.clean()
+        sleep(0.2)
     
