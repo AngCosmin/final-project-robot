@@ -60,8 +60,8 @@ def thread_lights_changes(thread_name):
             lights.animation_loading()
         elif lights_mode == 'pulse':
             print 'Animation pulse' 
-            lights.animation_rainbow()                       
-            # lights.animation_pulse()
+            # lights.animation_rainbow()                       
+            lights.animation_pulse()
         elif lights_mode == 'rainbow':
             print 'Animation rainbow'            
             lights.animation_rainbow()

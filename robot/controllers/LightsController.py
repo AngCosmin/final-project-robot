@@ -56,15 +56,15 @@ class LightsController:
             sleep(0.05)
 
     def animation_pulse(self):
-        for j in range(0, self.strip.numPixels(), 1):
-            self.strip.setPixelColor(j, Color(255, 0, 0))
+        for i in range(0, self.strip.numPixels(), 1):
+            self.strip.setPixelColor(i, Color(255, 0, 0))
             self.strip.show()    
 
-        for i in range(0, 255, 1):
+        for i in range(0, 255, 30):
             self.strip.setBrightness(i)    
             self.strip.show()
 
-        for i in range(255, 0, -1):
+        for i in range(255, 0, -30):
             self.strip.setBrightness(i)    
             self.strip.show()
 
