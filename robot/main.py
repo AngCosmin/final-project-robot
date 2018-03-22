@@ -54,13 +54,13 @@ def thread_calculate_ultrasonic_distance(thread_name):
 def thread_lights_changes(thread_name):
     global lights_mode
 
-    while True:
-        if lights_mode == 'loading':
-            lights.animation_loading()
-        elif lights_mode == 'pulse':
-            lights.animation_pulse()
-        elif lights_mode == 'rainbow':
-            lights.animation_rainbow()
+    # while True:
+        # if lights_mode == 'loading':
+            # lights.animation_loading()
+        # elif lights_mode == 'pulse':
+            # lights.animation_pulse()
+        # elif lights_mode == 'rainbow':
+            # lights.animation_rainbow()
 
 def thread_robot_autonomous(thread_name):
     global robot_mode
