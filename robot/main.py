@@ -30,6 +30,8 @@ ultrasonic = UltrasonicController()
 servo = ServoController()
 lights = LightsController()
 
+servo.lastActiveTime = time()
+
 def clean():
     motors.clean()
     relay.clean()
@@ -88,7 +90,7 @@ def thread_robot_autonomous(thread_name):
                     servo.compute(object_y)
 
                 #     motors.lastActiveTime = time()
-                #     servo.lastActiveTime = time()
+                    servo.lastActiveTime = time()
                 else:
                     lights_mode = 'ball_lost'
                 #     motors.stop()
