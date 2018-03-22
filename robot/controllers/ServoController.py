@@ -48,7 +48,7 @@ class ServoController:
             # He stayed for 3 seconds
 
             if self.movingTime == None:
-                self.movingTime = time() + 1
+                self.movingTime = time() + 2
 
                 # Choose a random direction to move
                 self.direction = randint(1000, 2000)
