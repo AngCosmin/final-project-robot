@@ -39,22 +39,18 @@ class LightsController:
             self.strip.show()
             sleep(wait_ms/1000.0)
 
-    def animation_loading(self):
+    def animation_loading(self, r, g, b):
         for i in range(0, self.strip.numPixels(), 1):
             for j in range(0, self.strip.numPixels(), 1):
                 self.strip.setPixelColor(j, Color(0, 0, 0))
 
-            if i == 0:
-                self.strip.setPixelColor(16, Color(100, 0, 0))            
-                self.strip.setPixelColor(15, Color(25, 0, 0))            
-            else:
-                self.strip.setPixelColor(i - 1, Color(100, 0, 0))
-                self.strip.setPixelColor(i - 2, Color(25, 0, 0))
+            self.strip.setPixelColor(i, Color(g, r, b))
+            self.strip.setPixelColor(i - 1 < 0 if 16 + i - 1 else i - 1, Color(g / 255 * 80, r, b))
+            self.strip.setPixelColor(i - 2 < 0 if 16 + i - 2 else i - 2, Color(g / 255 * 50, r, b)) 
+            self.strip.setPixelColor(i - 3 < 0 if 16 + i - 3 else i - 3, Color(g / 255 * 30, r, b))
+            self.strip.setPixelColor(i - 4 < 0 if 16 + i - 4 else i - 4, Color(g / 255 * 10, r, b))
                 
-            self.strip.setPixelColor(i, Color(0, 255, 0))
             self.strip.show()        
-            sleep(0.05)
-
 
     def clean(self):
         print 'Cleaning up LEDs...'        
