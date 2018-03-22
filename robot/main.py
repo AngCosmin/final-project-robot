@@ -65,7 +65,6 @@ def thread_lights_changes(thread_name):
         elif lights_mode == 'rainbow':
             print 'Animation rainbow'            
             lights.animation_rainbow()
-        sleep(1)
 
 def thread_robot_autonomous(thread_name):
     global robot_mode
