@@ -57,13 +57,14 @@ def thread_lights_changes(thread_name):
     while True:
         if lights_mode == 'loading':
             print 'Animation loading'
-            # lights.animation_loading()
+            lights.animation_loading()
         elif lights_mode == 'pulse':
             print 'Animation pulse'            
-            # lights.animation_pulse()
+            lights.animation_pulse()
         elif lights_mode == 'rainbow':
             print 'Animation rainbow'            
             # lights.animation_rainbow()
+        sleep(1)
 
 def thread_robot_autonomous(thread_name):
     global robot_mode
