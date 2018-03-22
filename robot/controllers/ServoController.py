@@ -44,6 +44,7 @@ class ServoController:
                 self.head.change(self.servoValue)
 
     def randomly_activate(self):
+        print 'Randomly activate'
         if time() - self.lastActiveTime > 3:
             # He stayed for 3 seconds
 
