@@ -25,7 +25,6 @@ class UltrasonicController:
         if distance > 25:
             distance = 25
 
-        print 'Distance: ' + str(distance)
         return distance
 
     def clean(self):
