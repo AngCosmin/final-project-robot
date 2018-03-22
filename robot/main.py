@@ -62,6 +62,7 @@ def thread_lights_changes(thread_name):
 
 def thread_robot_autonomous(thread_name):
     global robot_mode
+    global lights_mode
 
     try: 
         while True:
