@@ -54,12 +54,15 @@ def thread_calculate_ultrasonic_distance(thread_name):
 def thread_lights_changes(thread_name):
     global lights_mode
 
-    # while True:
-        # if lights_mode == 'loading':
+    while True:
+        if lights_mode == 'loading':
+            print 'Animation loading'
             # lights.animation_loading()
-        # elif lights_mode == 'pulse':
+        elif lights_mode == 'pulse':
+            print 'Animation pulse'            
             # lights.animation_pulse()
-        # elif lights_mode == 'rainbow':
+        elif lights_mode == 'rainbow':
+            print 'Animation rainbow'            
             # lights.animation_rainbow()
 
 def thread_robot_autonomous(thread_name):
@@ -74,8 +77,6 @@ def thread_robot_autonomous(thread_name):
                 print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
 
                 if object_x != sys.maxint and object_y != sys.maxint:
-                    print 'Lights mode: PULSE'
-                    
                     object_x = object_x - width / 2
                     object_y = object_y - height / 2
                     
@@ -94,7 +95,6 @@ def thread_robot_autonomous(thread_name):
                 #     servo.lastActiveTime = time()
                 else:
                     lights_mode = 'loading'
-                    print 'Lights mode: LOADING'
                 #     motors.stop()
                 #     # motors.randomly_activate()
                 #     # servo.randomly_activate()
