@@ -68,6 +68,7 @@ def thread_robot_randomly_activate(thread_name):
     while True:
         if robot_mode == 'autonomous':    
             servo.randomly_activate()
+        sleep(0.25)
 
 
 def thread_robot_autonomous(thread_name):
