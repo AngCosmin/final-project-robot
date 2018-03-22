@@ -2,7 +2,7 @@ import ConfigParser
 from neopixel import *
 from time import sleep
 
-class UltrasonicController:
+class LightsController:
     def __init__(self):
         config = ConfigParser.RawConfigParser()
 

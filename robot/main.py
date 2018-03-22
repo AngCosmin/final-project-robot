@@ -22,7 +22,7 @@ from controllers.Camera import Camera
 ws = None
 ultrasonic_distance = 0
 robot_mode = 'manual'
-led_mode = 'loading'
+lights_mode = 'loading'
 
 motors = MotorsController()
 relay = RelayController()
@@ -51,11 +51,11 @@ def thread_calculate_ultrasonic_distance(thread_name):
             motors.stop();            
         sleep(0.05);
 
-def thread_led_changes(thread_name):
-    global led_mode
+def thread_lights_changes(thread_name):
+    global lights_mode
 
     while True:
-        if led_mode == 'loading':
+        if lights_mode == 'loading':
             lights.animation_loading()
 
 def thread_robot_autonomous(thread_name):
@@ -185,7 +185,7 @@ if __name__ == "__main__":
 
         thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Distance', ))
         thread.start_new_thread(thread_robot_autonomous, ('Autonomous', ))        
-        thread.start_new_thread(thread_led_changes, ('Lights', ))        
+        thread.start_new_thread(thread_lights_changes, ('Lights', ))        
 
         websocket.enableTrace(True)
         ws = websocket.WebSocketApp('ws://' + server_ip + ':' + server_port)
