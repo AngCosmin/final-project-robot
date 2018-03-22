@@ -19,26 +19,24 @@ class LightsController:
 
             self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
             self.strip.begin()
-            self.strip.setPixelColor(1, Color(255, 0, 0))
         except Exception as e:
             print e  
 
     def animation_loading(self):
-        # print 'In animation loading'
-        # for i in range(0, self.strip.numPixels(), 1):
-        #     for j in range(0, self.strip.numPixels(), 1):
-        #         self.strip.setPixelColor(j, Color(0, 0, 0))
+        for i in range(0, self.strip.numPixels(), 1):
+            for j in range(0, self.strip.numPixels(), 1):
+                self.strip.setPixelColor(j, Color(0, 0, 0))
 
-        #     if i == 0:
-        #         self.strip.setPixelColor(16, Color(100, 0, 0))            
-        #         self.strip.setPixelColor(15, Color(25, 0, 0))            
-        #     else:
-        #         self.strip.setPixelColor(i - 1, Color(100, 0, 0))
-        #         self.strip.setPixelColor(i - 2, Color(25, 0, 0))
+            if i == 0:
+                self.strip.setPixelColor(16, Color(100, 0, 0))            
+                self.strip.setPixelColor(15, Color(25, 0, 0))            
+            else:
+                self.strip.setPixelColor(i - 1, Color(100, 0, 0))
+                self.strip.setPixelColor(i - 2, Color(25, 0, 0))
                 
-        #     self.strip.setPixelColor(i, Color(255, 0, 0))
-        #     self.strip.show()        
-        sleep(0.05)
+            self.strip.setPixelColor(i, Color(255, 0, 0))
+            self.strip.show()        
+            sleep(0.05)
 
     def clean(self):
         print 'Cleaning up LEDs...'        
