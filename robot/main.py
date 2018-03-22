@@ -71,6 +71,7 @@ def thread_robot_autonomous(thread_name):
                 frame, mask, object_x, object_y = camera.compute()
                 # ultrasonic.measure()
                 print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
+                print 'Something'
 
                 if object_x != sys.maxint and object_y != sys.maxint:
                     object_x = object_x - width / 2
@@ -89,7 +90,7 @@ def thread_robot_autonomous(thread_name):
                 else:
                     lights_mode = 'ball_lost'
                 #     motors.stop()
-                    motors.randomly_activate()
+                    # motors.randomly_activate()
                     servo.randomly_activate()
 
                 # # show the frame
