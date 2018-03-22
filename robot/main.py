@@ -62,7 +62,7 @@ def thread_robot_autonomous(thread_name):
                     object_x = object_x - width / 2
                     object_y = object_y - height / 2
 
-                    print 'Object X: ' + object_x + ' Object Y: ' + object_y
+                    print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
                 #     # Update the last active time
                 #     lastActiveTime = time()
 
