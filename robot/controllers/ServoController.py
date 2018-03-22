@@ -18,11 +18,11 @@ class ServoController:
             self.head = Servo(pin)
             self.servoValue = 1500
             self.head.change(1500)
+            self.lastDirection = 1500
 
             # The time when he did last action
             self.lastActiveTime = 0
             self.movingTime = None
-            self.lastDirection = 1500
         except Exception as e:
             print e
 
@@ -56,9 +56,9 @@ class ServoController:
                 direction = randint(1000, 2000)
                 while abs(self.lastDirection - direction) < 300:
                     direction = randint(1000, 2000)             
-                print 'Generated direction to ' + str(direction)       
             else:
                 if self.movingTime - time() > 0:
+                    print 'MOVE'
                     self.change(direction)							
                     self.lastDirection = direction
                 else:
@@ -68,5 +68,4 @@ class ServoController:
     def clean(self):
         print '[PINS] Cleaning up servo pins...'
         self.head.clean()
-        sleep(0.2)
     
