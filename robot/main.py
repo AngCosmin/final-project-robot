@@ -57,8 +57,10 @@ def thread_lights_changes(thread_name):
     while True:
         if lights_mode == 'loading':
             lights.animation_loading()
-        if lights_mode == 'pulse':
+        else if lights_mode == 'pulse':
             lights.animation_pulse()
+        else if lights_mode == 'rainbow':
+            lights.animation_rainbow()
 
 def thread_robot_autonomous(thread_name):
     global robot_mode
@@ -106,6 +108,8 @@ def thread_robot_autonomous(thread_name):
                 # if key == ord("q"):
                 #     clean()
                 #     break		
+            else:
+                lights_mode = 'rainbow'
     except Exception:
         clean()
     

@@ -22,6 +22,23 @@ class LightsController:
         except Exception as e:
             print e  
 
+    def wheel(self, pos):
+        if pos < 85:
+            return Color(pos * 3, 255 - pos * 3, 0)
+        elif pos < 170:
+            pos -= 85
+            return Color(255 - pos * 3, 0, pos * 3)
+        else:
+            pos -= 170
+            return Color(0, pos * 3, 255 - pos * 3)
+
+    def animation_rainbow(self, wait_ms=5, iterations=4):
+        for j in range(256*iterations):
+            for i in range(self.strip.numPixels()):
+                self.strip.setPixelColor(i, self.wheel((int(i * 256 / self.strip.numPixels()) + j) & 255))
+            self.strip.show()
+            sleep(wait_ms/1000.0)
+
     def animation_loading(self):
         print 'Animation loading'        
         for i in range(0, self.strip.numPixels(), 1):
