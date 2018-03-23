@@ -96,7 +96,7 @@ def thread_robot_autonomous(thread_name):
 
                     # motors.lastActiveTime = time()
                     servo.lastActiveTime = time()
-                # else:
+                else:
                     lights_mode = 'ball_lost'
                     # motors.stop()
                     # motors.randomly_activate()
