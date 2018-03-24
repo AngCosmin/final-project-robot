@@ -31,7 +31,7 @@ servo = ServoController()
 # lights = LightsController()
 
 def clean():
-    motors.clean()
+    # motors.clean()
     relay.clean()
     servo.clean()
     ultrasonic.clean()
