@@ -28,7 +28,7 @@ motors = MotorsController()
 relay = RelayController()
 ultrasonic = UltrasonicController()
 servo = ServoController()
-lights = LightsController()
+# lights = LightsController()
 
 def clean():
     motors.clean()
@@ -36,7 +36,7 @@ def clean():
     servo.clean()
     ultrasonic.clean()
     camera.clean()
-    lights.clean() 
+    # lights.clean() 
     sleep(0.5)
     GPIO.cleanup()
 
@@ -57,10 +57,9 @@ def thread_lights_changes(thread_name):
     while True:
         if lights_mode == 'ball_lost':
             # lights.animation_loading(0, 255, 0)
-            lights.animation_rainbow()            
         elif lights_mode == 'ball_found':
             print 'Animation rainbow'            
-            lights.animation_rainbow()
+            # lights.animation_rainbow()
 
 def thread_robot_randomly_activate(thread_name):
     global robot_mode
