@@ -16,7 +16,7 @@ from controllers.MotorsController import MotorsController
 from controllers.RelayController import RelayController
 from controllers.UltrasonicController import UltrasonicController
 from controllers.ServoController import ServoController
-from controllers.LightsController import LightsController
+# from controllers.LightsController import LightsController
 from controllers.Camera import Camera
 
 ws = None
