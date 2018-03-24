@@ -12,7 +12,7 @@ from time import sleep
 from time import time
 from threading import Thread
 from Queue import Queue
-from controllers.MotorsController import MotorsController
+# from controllers.MotorsController import MotorsController
 from controllers.RelayController import RelayController
 from controllers.UltrasonicController import UltrasonicController
 from controllers.ServoController import ServoController
@@ -24,7 +24,7 @@ ultrasonic_distance = 0
 robot_mode = 'manual'
 lights_mode = 'loading'
 
-motors = MotorsController()
+# motors = MotorsController()
 relay = RelayController()
 ultrasonic = UltrasonicController()
 servo = ServoController()
@@ -197,7 +197,7 @@ if __name__ == "__main__":
     try:
         print 'Connecting to ' + server_ip + ':' + server_port + '...'
 
-        thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Distance', ))
+        # thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Distance', ))
         thread.start_new_thread(thread_robot_autonomous, ('Autonomous', ))        
         thread.start_new_thread(thread_lights_changes, ('Lights', ))        
         thread.start_new_thread(thread_robot_randomly_activate, ('RandomlyActivate', ))        
