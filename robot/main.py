@@ -24,14 +24,14 @@ ultrasonic_distance = 0
 robot_mode = 'manual'
 lights_mode = 'loading'
 
-# motors = MotorsController()
+motors = MotorsController()
 relay = RelayController()
 ultrasonic = UltrasonicController()
 servo = ServoController()
 # lights = LightsController()
 
 def clean():
-    # motors.clean()
+    motors.clean()
     relay.clean()
     servo.clean()
     ultrasonic.clean()
@@ -197,7 +197,7 @@ if __name__ == "__main__":
     try:
         print 'Connecting to ' + server_ip + ':' + server_port + '...'
 
-        # thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Distance', ))
+        thread.start_new_thread(thread_calculate_ultrasonic_distance, ('Distance', ))
         thread.start_new_thread(thread_robot_autonomous, ('Autonomous', ))        
         thread.start_new_thread(thread_lights_changes, ('Lights', ))        
         thread.start_new_thread(thread_robot_randomly_activate, ('RandomlyActivate', ))        
