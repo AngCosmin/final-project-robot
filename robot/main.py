@@ -56,9 +56,10 @@ def thread_lights_changes(thread_name):
 
     while True:
         if lights_mode == 'ball_lost':
+            print 'Ball lost animation'
             # lights.animation_loading(0, 255, 0)
         elif lights_mode == 'ball_found':
-            print 'Animation rainbow'            
+            print 'Ball found animation'            
             # lights.animation_rainbow()
 
 def thread_robot_randomly_activate(thread_name):
