@@ -12,7 +12,7 @@ from time import sleep
 from time import time
 from threading import Thread
 from Queue import Queue
-# from controllers.MotorsController import MotorsController
+from controllers.MotorsController import MotorsController
 from controllers.RelayController import RelayController
 from controllers.UltrasonicController import UltrasonicController
 from controllers.ServoController import ServoController
