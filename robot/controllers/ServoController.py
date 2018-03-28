@@ -67,6 +67,4 @@ class ServoController:
 
     def clean(self):
         print '[PINS] Cleaning up servo pins...'
-        self.head.clean()
-        sleep(0.2)
-    
+        self.head.clean()    
