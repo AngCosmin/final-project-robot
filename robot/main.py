@@ -100,7 +100,7 @@ def thread_robot_autonomous(thread_name):
                 else:
                     lights_mode = 'ball_lost'
                     motors.stop()
-                    motors.randomly_activate()
+                    # motors.randomly_activate()
 
                 # # show the frame
                 # cv2.imshow("Frame", frame)    
