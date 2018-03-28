@@ -36,10 +36,10 @@ class ServoController:
             oldServoValue = self.servoValue
             self.servoValue = self.servoValue + object_y * 0.75
 
-            if self.servoValue < 1000:
-                self.servoValue = 1000
-            elif self.servoValue > 2000:
-                self.servoValue = 2000
+            if self.servoValue < 1200:
+                self.servoValue = 1200
+            elif self.servoValue > 1700:
+                self.servoValue = 1700
 
             if oldServoValue != self.servoValue:
                 self.head.change(self.servoValue)
