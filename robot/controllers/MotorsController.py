@@ -23,7 +23,7 @@ class MotorsController:
             PIN_PWM_RIGHT = config.getint('MotorRight', 'pin_pwm')
 
             # Get width of the image for function go_to_object
-            # self.image_width = config.getint('Image', 'width')            
+            self.image_width = config.getint('Image', 'width')            
             
             self.left = Motor(PIN_1_LEFT, PIN_2_LEFT, PIN_PWM_LEFT)
             self.right = Motor(PIN_1_RIGHT, PIN_2_RIGHT, PIN_PWM_RIGHT)  
@@ -31,7 +31,7 @@ class MotorsController:
             # The time when he did last action
             self.lastActiveTime = time()
             self.movingTime = None
-            self.direction = None       
+            self.direction = None   
         except Exception as e:
             print e
 
