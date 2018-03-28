@@ -44,12 +44,14 @@ class LightsController:
             for j in range(0, self.strip.numPixels(), 1):
                 self.strip.setPixelColor(j, Color(0, 0, 0))
 
-            self.strip.setPixelColor(i, Color(g, r, b))
-            self.strip.setPixelColor(i - 1 < 0 if 16 + i - 1 else i - 1, Color(g / 255 * 80, r, b))
-            self.strip.setPixelColor(i - 2 < 0 if 16 + i - 2 else i - 2, Color(g / 255 * 50, r, b)) 
-            self.strip.setPixelColor(i - 3 < 0 if 16 + i - 3 else i - 3, Color(g / 255 * 30, r, b))
-            self.strip.setPixelColor(i - 4 < 0 if 16 + i - 4 else i - 4, Color(g / 255 * 10, r, b))
-                
+            if i - 1 == -1:
+                self.strip.setPixelColor(15, Color(125, 0, 0))
+            elif i - 1 == -2:
+                self.strip.setPixelColor(14, Color(75, 0, 0))                
+            elif i - 1 == -3:
+                self.strip.setPixelColor(14, Color(20, 0, 0))                
+
+            self.strip.setPixelColor(i, Color(255, 0, 0))
             self.strip.show()        
 
     def clean(self):
