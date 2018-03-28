@@ -46,7 +46,7 @@ def thread_calculate_ultrasonic_distance(thread_name):
 
     while True:
         ultrasonic_distance = ultrasonic.measure()
-        # print 'Distance is ' + ultrasonic_distance
+        print 'Distance is ' + ultrasonic_distance
         if ultrasonic_distance == 0:
             motors.stop();            
         sleep(0.05);
@@ -56,10 +56,8 @@ def thread_lights_changes(thread_name):
 
     while True:
         if lights_mode == 'ball_lost':
-            print 'Ball lost animation'
             lights.animation_loading(0, 255, 0)
         elif lights_mode == 'ball_found':
-            print 'Ball found animation'            
             lights.animation_rainbow()
 
 def thread_robot_randomly_activate(thread_name):
@@ -80,7 +78,7 @@ def thread_robot_autonomous(thread_name):
         while True:
             if robot_mode == 'autonomous': 
                 frame, mask, object_x, object_y = camera.compute()
-                # ultrasonic.measure()
+                ultrasonic.measure()
                 print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
 
                 if object_x != sys.maxint and object_y != sys.maxint:
@@ -90,7 +88,7 @@ def thread_robot_autonomous(thread_name):
                     lights_mode = 'ball_found'
 
                     # Activate motors
-                    # motors.go_to_object(object_x)
+                    motors.go_to_object(object_x)
 
                     # Activate servo
                     servo.compute(object_y)
@@ -99,8 +97,8 @@ def thread_robot_autonomous(thread_name):
                     servo.lastActiveTime = time()
                 else:
                     lights_mode = 'ball_lost'
-                    # motors.stop()
-                    # motors.randomly_activate()
+                    motors.stop()
+                    motors.randomly_activate()
 
                 # # show the frame
                 # cv2.imshow("Frame", frame)    
