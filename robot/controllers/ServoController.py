@@ -52,10 +52,10 @@ class ServoController:
                 self.movingTime = time() + 2
 
                 # Choose a random direction to move
-                self.direction = randint(1200, 1800)
+                self.direction = randint(1200, 1600)
 
-                while abs(self.lastDirection - self.direction) < 200:
-                    self.direction = randint(1200, 1800)
+                while abs(self.lastDirection - self.direction) < 150:
+                    self.direction = randint(1200, 1600)
             else:
                 if self.movingTime - time() > 0:
                     print 'Move to ' + str(self.direction)
