@@ -47,7 +47,7 @@ def thread_calculate_ultrasonic_distance(thread_name):
     while True:
         ultrasonic_distance = ultrasonic.measure()
         if ultrasonic_distance != None:
-            print 'Distance is ' + str(ultrasonic_distance)
+            # print 'Distance is ' + str(ultrasonic_distance)
             if ultrasonic_distance == 0:
                 motors.stop();            
         sleep(0.05);
@@ -57,8 +57,10 @@ def thread_lights_changes(thread_name):
 
     while True:
         if lights_mode == 'ball_lost':
+            print 'Ball lost'
             lights.animation_loading(0, 255, 0)
         elif lights_mode == 'ball_found':
+            print 'Ball found'            
             lights.animation_rainbow()            
 
 def thread_robot_randomly_activate(thread_name):
