@@ -36,8 +36,8 @@ class ServoController:
             oldServoValue = self.servoValue
             self.servoValue = self.servoValue + object_y * 0.75
 
-            if self.servoValue < 1100:
-                self.servoValue = 1100
+            if self.servoValue < 1150:
+                self.servoValue = 1150
             elif self.servoValue > 1750:
                 self.servoValue = 1750
 
