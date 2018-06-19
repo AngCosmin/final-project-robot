@@ -82,7 +82,7 @@ def thread_robot_autonomous(thread_name):
             if robot_mode == 'autonomous': 
                 frame, mask, object_x, object_y = camera.compute()
                 ultrasonic.measure()
-                # print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
+                print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
 
                 if object_x != sys.maxint and object_y != sys.maxint:
                     object_x = object_x - width / 2
@@ -91,7 +91,7 @@ def thread_robot_autonomous(thread_name):
                     lights_mode = 'ball_found'
 
                     # Activate motors
-                    # motors.go_to_object(object_x)
+                    motors.go_to_object(object_x)
 
                     # Activate servo
                     servo.compute(object_y)
@@ -100,8 +100,8 @@ def thread_robot_autonomous(thread_name):
                     servo.lastActiveTime = time()
                 else:
                     lights_mode = 'ball_lost'
-                    # motors.stop()
-                    # motors.randomly_activate()
+                    motors.stop()
+                    motors.randomly_activate()
 
                 # # show the frame
                 # cv2.imshow("Frame", frame)    
