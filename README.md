@@ -1,5 +1,10 @@
 # licenta-robot
 
+# How to run:
+- Start expo packager in app folder: exp start (if offline use: exp start --offline)
+- Start server in server folder: npm start
+- Start robot in robot folder: sudo pigpiod && sudo ./main.py
+
 Tested on:
 - node: v8.5.0
 - npm: 5.3.0
