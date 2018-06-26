@@ -47,7 +47,7 @@ def thread_calculate_ultrasonic_distance(thread_name):
     while True:
         ultrasonic_distance = ultrasonic.measure()
         if ultrasonic_distance != None:
-            # print 'Distance is ' + str(ultrasonic_distance)
+            print 'Distance is ' + str(ultrasonic_distance)
             if ultrasonic_distance == 0:
                 motors.stop();            
         sleep(0.05);
