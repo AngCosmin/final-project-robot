@@ -8,8 +8,7 @@ import sys
 import cv2
 import RPi.GPIO as GPIO
 from imutils.video import VideoStream
-from time import sleep
-from time import time
+from time import sleep, time
 from threading import Thread
 from Queue import Queue
 from controllers.MotorsController import MotorsController
@@ -23,6 +22,7 @@ ws = None
 ultrasonic_distance = 0
 robot_mode = 'manual'
 lights_mode = 'loading'
+relay_status = 'off'
 
 motors = MotorsController()
 relay = RelayController()
@@ -56,15 +56,16 @@ def thread_lights_changes(thread_name):
     global lights_mode
 
     while True:
-        if lights_mode == 'ball_lost':
-            print '[LIGHTS] Ball lost'
-            lights.animation_loading(0, 255, 0)
-        elif lights_mode == 'ball_found':
-            print '[LIGHTS] Ball found'            
-            lights.animation_rainbow() 
-        elif lights_mode == 'manual_mode':
-            print '[LIGHTS] Manual mode'   
-            lights.animation_loading(255, 0, 0)
+        if relay_status == 'on':
+            if lights_mode == 'ball_lost':
+                print '[LIGHTS] Ball lost'
+                lights.animation_loading_green()
+            elif lights_mode == 'ball_found':
+                print '[LIGHTS] Ball found'            
+                lights.animation_rainbow() 
+            elif lights_mode == 'manual_mode':
+                print '[LIGHTS] Manual mode'   
+                lights.animation_loading_blue()
 
 def thread_robot_randomly_activate(thread_name):
     global robot_mode
@@ -133,6 +134,7 @@ def on_close(ws):
 
 def on_message(ws, message):
     global robot_mode
+    global relay_status
 
     try:
         message = json.loads(message)
@@ -154,8 +156,10 @@ def on_message(ws, message):
                     motors.move_motors(motorLeftSpeed, motorRightSpeed)                                    
         elif event == 'turn_motors':
             if message['status'] == 'on':
+                relay_status = 'on'
                 relay.start()
             else:
+                relay_status = 'off'                
                 relay.stop()
         elif event == 'robot_mode':
             print 'Changing mode to ' + message['mode']
