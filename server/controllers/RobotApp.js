@@ -21,8 +21,9 @@ class RobotApp {
         }
         else if (this.socket != null && this.socket.readyState == WebSocket.OPEN) {
             // Mobile app is still connected
-
-            this.socket.send(JSON.stringify({'event': 'ping', 'timestamp': Date.now()}));
+            let now = parseInt(Date.now() / 1000)
+            console.log('NOW: ' + now);
+            this.socket.send(JSON.stringify({ 'event': 'ping', 'timestamp': now }));
             return true;
         }
     }
@@ -32,7 +33,7 @@ class RobotApp {
         this.pongReceivedTimestamp = null;
     }
 
-    setPongReceivedTimestamp (timestamp) {
+    setPongReceivedTimestamp(timestamp) {
         this.pongReceivedTimestamp = timestamp;
     }
 }

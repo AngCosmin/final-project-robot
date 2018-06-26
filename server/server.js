@@ -13,7 +13,7 @@ const { app } = electron;
 
 let ui = null;
 let mobileApp = new MobileApp();
-let robotApp = new robotApp();
+let robotApp = new RobotApp();
 let motors = new MotorsController();
 
 app.on('ready', function () {
