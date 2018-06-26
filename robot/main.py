@@ -135,6 +135,8 @@ def on_message(ws, message):
         message = json.loads(message)
         event = message['event']
         
+        print (message)
+        
         if event == 'move':
             if robot_mode == 'manual':
                 motorLeftSpeed = message['motorLeftSpeed']
