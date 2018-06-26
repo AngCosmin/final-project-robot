@@ -61,13 +61,13 @@ class LightsController:
                 self.strip.setPixelColor(j, Color(0, 0, 0))
 
             if i - 1 == -1:
-                self.strip.setPixelColor(15, Color(0, 125, 0))
+                self.strip.setPixelColor(15, Color(0, 0, 125))
             elif i - 1 == -2:
-                self.strip.setPixelColor(14, Color(0, 75, 0))                
+                self.strip.setPixelColor(14, Color(0, 0, 75))                
             elif i - 1 == -3:
-                self.strip.setPixelColor(14, Color(0, 20, 0))                
+                self.strip.setPixelColor(14, Color(0, 0, 20))                
 
-            self.strip.setPixelColor(i, Color(0, 255, 0))
+            self.strip.setPixelColor(i, Color(0, 0, 255))
             self.strip.show()  
             sleep(0.05)     
 
