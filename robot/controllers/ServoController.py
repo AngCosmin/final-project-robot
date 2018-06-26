@@ -32,7 +32,7 @@ class ServoController:
         self.head.change(value)
     
     def compute(self, object_y):
-        if abs(object_y) > 10:
+        if abs(object_y) > 15:
             oldServoValue = self.servoValue
             self.servoValue = self.servoValue + object_y * 0.75
 
