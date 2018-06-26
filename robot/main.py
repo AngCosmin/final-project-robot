@@ -82,7 +82,7 @@ def thread_robot_autonomous(thread_name):
             if robot_mode == 'autonomous': 
                 frame, mask, object_x, object_y = camera.compute()
                 ultrasonic.measure()
-                # print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
+                print 'Object X: ' + str(object_x) + ' Object Y: ' + str(object_y)
 
                 if object_x != sys.maxint and object_y != sys.maxint:
                     object_x = object_x - width / 2
