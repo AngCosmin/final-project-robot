@@ -10,7 +10,10 @@ class RobotApp {
         let timePassed = 0;
 
         if (this.pongReceivedTimestamp != null) {
-            timePassed = Date.now() - this.pongReceivedTimestamp;
+            // Calcaulate 'now' because there is a difference between python fuction for 
+            // timestamp and javascript function
+            let now = parseInt(Date.now() / 1000)
+            timePassed = now - this.pongReceivedTimestamp;
         }
 
         if (timePassed > 2000) {
@@ -21,8 +24,11 @@ class RobotApp {
         }
         else if (this.socket != null && this.socket.readyState == WebSocket.OPEN) {
             // Mobile app is still connected
+
+            // Calcaulate 'now' because there is a difference between python fuction for 
+            // timestamp and javascript function
             let now = parseInt(Date.now() / 1000)
-            console.log('NOW: ' + now);
+
             this.socket.send(JSON.stringify({ 'event': 'ping', 'timestamp': now }));
             return true;
         }
