@@ -3,7 +3,8 @@ const electron = require('electron');
 const ip = require("ip");
 const os = require('os');
 
-const MobileApp = require('./MobileApp');
+const MobileApp = require('./controllers/MobileApp');
+const RobotApp = require('./controllers/RobotApp');
 const MotorsController = require('./controllers/MotorController');
 const UI = require('./UI');
 
@@ -12,6 +13,7 @@ const { app } = electron;
 
 let ui = null;
 let mobileApp = new MobileApp();
+let robotApp = new robotApp();
 let motors = new MotorsController();
 
 app.on('ready', function () {
@@ -22,12 +24,17 @@ app.on('ready', function () {
         ui.sendToView('server-ip', ip.address());    
         
         let isMobileAppConnected = mobileApp.checkConnection();
+        let isRobotConnected = robotApp.checkConnection();
 
         if (!isMobileAppConnected) {
             ui.sendToView('mobile-app:status', 'Not connected');
         }
+
+        if (!isRobotConnected) {
+            ui.sendToView('robot-app:status', 'Not connected');
+        }
     }, 1000);
-});
+});0
 
 wss.on('connection', function (socket) {        
     socket.on('message', function (object) {
@@ -45,7 +52,8 @@ wss.on('connection', function (socket) {
                     ui.sendToView('mobile-app:status', 'Connected');
                 }
                 else if (client === 'Robot') {
-                    console.log('Robot is now connected');
+                    robotApp.setupNewConnection(socket);
+                    ui.sendToView('robot-app:status', 'Connected');
                     motors.setupNewConnection(socket);
                 }
                 break;
@@ -60,6 +68,9 @@ wss.on('connection', function (socket) {
                 break;
             case 'pong':
                 mobileApp.setPongReceivedTimestamp(object.timestamp);
+                break;
+            case 'pong-robot':
+                robotApp.setPongReceivedTimestamp(object.timestamp);
                 break;
         }
     });

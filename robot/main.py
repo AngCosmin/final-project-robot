@@ -160,6 +160,9 @@ def on_message(ws, message):
                 robot_mode = 'autonomous'
             else:
                 robot_mode = 'manual'
+        elif event == 'ping':
+            ws.send(json.dumps({'event': 'pong-robot', 'timestamp': time()}));
+
     except Exception as e:
         print e
 

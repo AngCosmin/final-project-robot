@@ -42,7 +42,7 @@
 		
 		<div class="status">
 			Robot
-			<span id="robot-status" class="danger-status-message">Not connected</span>
+			<span id="robot-app-status" class="danger-status-message">Not connected</span>
 		</div>
 		<div class="status">
 			Mobile app
@@ -55,7 +55,7 @@
         const { ipcRenderer } = electron;
         
         let serverIp = document.querySelector('#server-ip');
-        let robotStatus = document.querySelector('#robot-status');
+        let robotAppStatus = document.querySelector('#robot-app-status');
         let mobileAppStatus = document.querySelector('#mobile-app-status');
 
         ipcRenderer.on('mobile-app:status', function (e, status) {
@@ -66,6 +66,17 @@
             }
             else {
                 mobileAppStatus.className = 'danger-status-message';                
+            }
+        });
+
+        ipcRenderer.on('robot-app:status', function(e, status) {
+            robotAppStatus.innerHTML = status;
+
+            if (status == 'Connected') {
+                robotAppStatus.className = 'success-status-message';
+            }
+            else {
+                robotAppStatus.className = 'danger-status-message';
             }
         });
 

@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "25.0.0"
+    "sdkVersion": "25.0.0",
+    "name": "Robot Remote Control",
+    "icon": "./src/assets/pan.png",
+    "version": "1.0.0",
+    "slug": "robot-remote-control",
+    "ios": {
+      "bundleIdentifier": "com.cosmin.codes.robot-app"
+    },
+    "android": {
+      "package": "com.cosmin.codes.robot-app"
+    }
   }
 }
