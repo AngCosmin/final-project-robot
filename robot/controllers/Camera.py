@@ -20,61 +20,61 @@ class Camera:
         # Resize frame
         frame = imutils.resize(frame, width=self.width)
 
-        # Apply median filter
-        # frame = cv2.medianBlur(frame, 3)
+        Apply median filter
+        frame = cv2.medianBlur(frame, 3)
 
-        # # Convert image to HSV
-        # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
-        # # Get pieces within the color range
-        # mask = cv2.inRange(hsv, self.colorLower, self.colorUpper)
-
-        # # Apply gaussian blur
-        # # mask = cv2.GaussianBlur(mask, (5,5),0)
-
-        # # Erodate to eliminate noise
-        # mask = cv2.erode(mask, None, iterations=2)
-
-        # # Dilatate
-        # mask = cv2.dilate(mask, None, iterations=2)
-
-        # # Find contour
-        # contour = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
-        
-        # # If contour was found
-        # if len(contour) > 0:
-        #     # Find the largest contour in the mask
-        #     circle = max(contour, key=cv2.contourArea)
-
-        #     #  Use contour to compute the minimum enclosing circle
-        #     ((x, y), radius) = cv2.minEnclosingCircle(circle)
-
-        #     M = cv2.moments(circle)
-        #     center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-
-        #     if radius > 10:
-        #         # draw the circle and centroid on the frame,
-        #         cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
-        #         cv2.circle(frame, center, 5, (0, 0, 255), -1)
-
-        img = cv2.GaussianBlur(frame, (7, 7), 0)
+        # Convert image to HSV
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-        mask = cv2.inRange(hsv, (min_h, min_s, min_v), (max_h, max_s, max_v))
-        mask = cv2.erode(mask, None, iterations=5)
-        mask = cv2.dilate(mask, None, iterations=15)
+        # Get pieces within the color range
+        mask = cv2.inRange(hsv, self.colorLower, self.colorUpper)
 
-        circles = cv2.HoughCircles(mask, cv2.HOUGH_GRADIENT, 1, 50, param1=1, param2=10, minRadius=5, maxRadius=0)
+        # Apply gaussian blur
+        # mask = cv2.GaussianBlur(mask, (5,5),0)
 
-        if circles is not None:
-            circles = np.round(circles[0, :]).astype("int")
+        # Erodate to eliminate noise
+        mask = cv2.erode(mask, None, iterations=2)
 
-            max_r = 0
-            for (circle_x, circle_y, r) in circles:
-                if r > max_r:
-                    max_r = r
-                    x = circle_x
-                    y = circle_y
+        # Dilatate
+        mask = cv2.dilate(mask, None, iterations=2)
+
+        # Find contour
+        contour = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+        
+        # If contour was found
+        if len(contour) > 0:
+            # Find the largest contour in the mask
+            circle = max(contour, key=cv2.contourArea)
+
+            #  Use contour to compute the minimum enclosing circle
+            ((x, y), radius) = cv2.minEnclosingCircle(circle)
+
+            M = cv2.moments(circle)
+            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+
+            if radius > 10:
+                # draw the circle and centroid on the frame,
+                cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
+                cv2.circle(frame, center, 5, (0, 0, 255), -1)
+
+        # img = cv2.GaussianBlur(frame, (7, 7), 0)
+        # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        # mask = cv2.inRange(hsv, (min_h, min_s, min_v), (max_h, max_s, max_v))
+        # mask = cv2.erode(mask, None, iterations=5)
+        # mask = cv2.dilate(mask, None, iterations=15)
+
+        # circles = cv2.HoughCircles(mask, cv2.HOUGH_GRADIENT, 1, 50, param1=1, param2=10, minRadius=5, maxRadius=0)
+
+        # if circles is not None:
+        #     circles = np.round(circles[0, :]).astype("int")
+
+        #     max_r = 0
+        #     for (circle_x, circle_y, r) in circles:
+        #         if r > max_r:
+        #             max_r = r
+        #             x = circle_x
+        #             y = circle_y
 
         return frame, mask, x, y
 
