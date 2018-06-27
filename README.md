@@ -10,6 +10,9 @@ Tested on:
 - npm: 5.3.0
 - python: 2.7.9
 
+# Open CV
+`pip3 install opencv-python`
+
 # For NodeJS:  
 `npm install --save ws`
 
