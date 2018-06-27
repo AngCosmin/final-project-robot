@@ -20,7 +20,7 @@ class Camera:
         # Resize frame
         frame = imutils.resize(frame, width=self.width)
 
-        Apply median filter
+        # Apply median filter
         frame = cv2.medianBlur(frame, 3)
 
         # Convert image to HSV
