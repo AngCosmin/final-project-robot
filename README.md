@@ -1,57 +1,13 @@
-# licenta-robot
+## Raspberry Pi Robot 🤖 
 
-# How to run:
-- Start expo packager in app folder: exp start (if offline use: exp start --offline)
-- Start server in server folder: npm start
-- Start robot in robot folder: sudo pigpiod && sudo ./main.py
+<img src="https://user-images.githubusercontent.com/8146514/71549916-42dcf480-29ce-11ea-8a7f-acbda4a4a1c0.png" width="100%">
 
-Tested on:
-- node: v8.5.0
-- npm: 5.3.0
-- python: 2.7.9
+🏆  1st place in a university competition 🎓
 
-# Open CV
-`pip3 install opencv-python`
+This project is my final bachelor degree project. The robot can be controlled over the internet using a mobile application made in React Native which connect to a NodeJS server and communication between them is made using websockets.
 
-# For NodeJS:  
-`npm install --save ws`
+Server interface is made using Electron and it display the status of mobile application and robot application. Robot application is made in Python and use websockets to connect to server and OpenCV for ball tracking.
 
-# For Python:  
-`sudo pip install websocket-client`
+Technologies used: `Python` `Javascript` `NodeJS` `Websockets` `React Native` `Electron` `OpenCV`
 
-# For React-Native  
-- `npm install -g react-native-cli`  
-- `npm install -g yarn`  
-- `sudo apt-get install android-tools-adb`  
-- Go [here](https://facebook.github.io/react-native/docs/running-on-device.html) and do what they say
-- `react-native start`. If you have a port error you can use `react-native start --port=8088`
-
-Errors
-- if you get an error with **gradle** which say it couldn't be found then go in android folder open build.gradle and instead of jcenter() use this: 
-```
-jcenter({
-    url "http://jcenter.bintray.com/"
-})
-```
-- **android sdk not found**
-  - Go [here](https://developer.android.com/studio/index.html#downloads) and download sdk tools
-  - Create a folder called *Android* somewhere on the disk and inside it create a folder *tools*
-  - In this folder extract what you have downloaded. (Yes, there will be a tools folder inside a tools folder)
-  - Go in your application folder and then in android folder and create a new file called `local.properties`
-  - Paste this in file `sdk.dir = /home/cosmin/Android/tools/`
-- **license agreement**
-  - Go in *Android/tools/tools/bin* and run `./sdkmanager --licenses`
-- **tools.jar not found**
-    - Go [here](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and download the JDK
-    - Extract it somewhere on the disk
-    - Go in your application folder and then in anroid folder and open `gradle.properties`
-    - Add this line at the end `org.gradle.java.home=/home/......../jdk1.8.0_151/`
-- **unable to load script from assets 'index.android.bundle'**
-    - Run this: `mkdir android/app/src/main/assets` in your project folder
-    - Then this: `react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res`
-    - And finally this: `react-native run-android`
-- **Failed at the app@0.0.1 start script.**
-    -- Run this: `echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p`
-
-### Notes
-- to create a new react-native project use `react-native init myapp`
+🎬 You can find some DEMOs here: 🔗 [video 1](https://youtu.be/kGCDWxzGauA), 🔗 [video 2](https://youtu.be/4IdgQTjr4aY) and 🔗 [video 3](https://youtu.be/h1N25ActYt4).
